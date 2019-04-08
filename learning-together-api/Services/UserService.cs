@@ -117,7 +117,7 @@ namespace learning_together_api.Services
             if (string.IsNullOrWhiteSpace(password))
                 throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
 
-            using (HMACSHA512 hmac = new System.Security.Cryptography.HMACSHA512())
+            using (HMACSHA512 hmac = new HMACSHA512())
             {
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
@@ -134,7 +134,7 @@ namespace learning_together_api.Services
             if (storedSalt.Length != 128)
                 throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
 
-            using (HMACSHA512 hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
+            using (HMACSHA512 hmac = new HMACSHA512(storedSalt))
             {
                 byte[] computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 for (int i = 0; i < computedHash.Length; i++)

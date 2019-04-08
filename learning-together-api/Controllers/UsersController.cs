@@ -17,31 +17,31 @@ namespace learning_together_api.Controllers
 
     public class UsersController : LearnTogetherController
    {
-        private IUserService _userService;
-        private IMapper _mapper;
-        private readonly AppSettings _appSettings;
+        private readonly IUserService userService;
+        private readonly IMapper mapper;
+        private readonly AppSettings appSettings;
 
         public UsersController(
             IUserService userService,
             IMapper mapper,
             IOptions<AppSettings> appSettings)
         {
-            _userService = userService;
-            _mapper = mapper;
-            _appSettings = appSettings.Value;
+            this.userService = userService;
+            this.mapper = mapper;
+            this.appSettings = appSettings.Value;
         }
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]UserDto userDto)
         {
-            User user = _userService.Authenticate(userDto.Username, userDto.Password);
+            User user = this.userService.Authenticate(userDto.Username, userDto.Password);
 
             if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+                return this.BadRequest(new { message = "Username or password is incorrect" });
 
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            byte[] key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            byte[] key = Encoding.ASCII.GetBytes(this.appSettings.Secret);
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[] 
@@ -55,7 +55,7 @@ namespace learning_together_api.Controllers
             string tokenString = tokenHandler.WriteToken(token);
 
             // return basic user info (without password) and token to store client side
-            return Ok(new {
+            return this.Ok(new {
                 Id = user.Id,
                 Username = user.Username,
                 FirstName = user.FirstName,
@@ -69,62 +69,62 @@ namespace learning_together_api.Controllers
         public IActionResult Register([FromBody]UserDto userDto)
         {
             // map dto to entity
-            User user = _mapper.Map<User>(userDto);
+            User user = this.mapper.Map<User>(userDto);
 
             try 
             {
                 // save 
-                _userService.Create(user, userDto.Password);
-                return Ok();
+                this.userService.Create(user, userDto.Password);
+                return this.Ok();
             } 
             catch(AppException ex)
             {
                 // return error message if there was an exception
-                return BadRequest(new { message = ex.Message });
+                return this.BadRequest(new { message = ex.Message });
             }
         }
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            IEnumerable<User> users =  _userService.GetAll();
-            IList<UserDto> userDtos = _mapper.Map<IList<UserDto>>(users);
-            return Ok(userDtos);
+            IEnumerable<User> users =  this.userService.GetAll();
+            IList<UserDto> userDtos = this.mapper.Map<IList<UserDto>>(users);
+            return this.Ok(userDtos);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            User user =  _userService.GetById(id);
-            UserDto userDto = _mapper.Map<UserDto>(user);
-            return Ok(userDto);
+            User user =  this.userService.GetById(id);
+            UserDto userDto = this.mapper.Map<UserDto>(user);
+            return this.Ok(userDto);
         }
 
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody]UserDto userDto)
         {
             // map dto to entity and set id
-            User user = _mapper.Map<User>(userDto);
+            User user = this.mapper.Map<User>(userDto);
             user.Id = id;
 
             try 
             {
                 // save 
-                _userService.Update(user, userDto.Password);
-                return Ok();
+                this.userService.Update(user, userDto.Password);
+                return this.Ok();
             } 
             catch(AppException ex)
             {
                 // return error message if there was an exception
-                return BadRequest(new { message = ex.Message });
+                return this.BadRequest(new { message = ex.Message });
             }
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _userService.Delete(id);
-            return Ok();
+            this.userService.Delete(id);
+            return this.Ok();
         }
     }
 }
