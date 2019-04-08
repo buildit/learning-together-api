@@ -27,7 +27,10 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddDbContext<DataContext>(x => x.UseInMemoryDatabase("TestDb"));
+            services.AddEntityFrameworkNpgsql()
+                .AddDbContext<DataContext>(c => c.UseNpgsql(this.Configuration.GetConnectionString("LearningTogether")))
+                .BuildServiceProvider();
+            // services.AddDbContext<DataContext>(x => x.UseInMemoryDatabase("TestDb"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddAutoMapper();
 
@@ -49,7 +52,8 @@
                     {
                         OnTokenValidated = context =>
                         {
-                            IUserService userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            IUserService userService =
+                                context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                             int userId = int.Parse(context.Principal.Identity.Name);
                             User user = userService.GetById(userId);
                             if (user == null)
@@ -88,6 +92,7 @@
                 app.UseDeveloperExceptionPage();
             else
                 app.UseHsts();
+
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
