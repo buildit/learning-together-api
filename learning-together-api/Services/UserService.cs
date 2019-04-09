@@ -1,11 +1,10 @@
 namespace learning_together_api.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Cryptography;
     using Data;
     using Exceptions;
+    using Microsoft.EntityFrameworkCore;
 
     public class UserService : IUserService
     {
@@ -19,17 +18,23 @@ namespace learning_together_api.Services
         public User Authenticate(string username, string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
                 return null;
+            }
 
             User user = this.context.Users.SingleOrDefault(x => x.Username == username);
 
             // check if username exists
             if (user == null)
+            {
                 return null;
+            }
 
             // check if password is correct
-            if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            if (!SecurityService.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            {
                 return null;
+            }
 
             // authentication successful
             return user;
@@ -42,20 +47,27 @@ namespace learning_together_api.Services
 
         public User GetById(int id)
         {
-            return this.context.Users.Find(id);
+            return this.context.Users.Where(u => u.Id == id)
+                .Include(u => u.Location)
+                .Include(u => u.Role)
+                .Include(u => u.UserInterests).ThenInclude(ui => ui.Discipline)
+                .FirstOrDefault();
         }
 
         public User Create(User user, string password)
         {
             // validation
             if (string.IsNullOrWhiteSpace(password))
+            {
                 throw new AppException("Password is required");
+            }
 
             if (this.context.Users.Any(x => x.Username == user.Username))
-                throw new AppException("Username \"" + user.Username + "\" is already taken");
+            {
+                throw new AppException($"Username {user.Username} is already taken");
+            }
 
-            byte[] passwordHash, passwordSalt;
-            CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            SecurityService.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
@@ -71,13 +83,17 @@ namespace learning_together_api.Services
             User user = this.context.Users.Find(userParam.Id);
 
             if (user == null)
+            {
                 throw new AppException("User not found");
+            }
 
             if (userParam.Username != user.Username)
             {
                 // username has changed so check if the new username is already taken
                 if (this.context.Users.Any(x => x.Username == userParam.Username))
-                    throw new AppException("Username " + userParam.Username + " is already taken");
+                {
+                    throw new AppException($"Username {userParam.Username} is already taken");
+                }
             }
 
             // update user properties
@@ -88,8 +104,7 @@ namespace learning_together_api.Services
             // update password if it was entered
             if (!string.IsNullOrWhiteSpace(password))
             {
-                byte[] passwordHash, passwordSalt;
-                CreatePasswordHash(password, out passwordHash, out passwordSalt);
+                SecurityService.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
@@ -107,43 +122,6 @@ namespace learning_together_api.Services
                 this.context.Users.Remove(user);
                 this.context.SaveChanges();
             }
-        }
-
-        // private helper methods
-
-        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            if (password == null) throw new ArgumentNullException("password");
-            if (string.IsNullOrWhiteSpace(password))
-                throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
-
-            using (HMACSHA512 hmac = new HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
-        }
-
-        private static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
-        {
-            if (password == null) throw new ArgumentNullException("password");
-            if (string.IsNullOrWhiteSpace(password))
-                throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
-            if (storedHash.Length != 64)
-                throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
-            if (storedSalt.Length != 128)
-                throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
-
-            using (HMACSHA512 hmac = new HMACSHA512(storedSalt))
-            {
-                byte[] computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                for (int i = 0; i < computedHash.Length; i++)
-                {
-                    if (computedHash[i] != storedHash[i]) return false;
-                }
-            }
-
-            return true;
         }
     }
 }

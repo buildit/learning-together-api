@@ -30,11 +30,10 @@
             services.AddEntityFrameworkNpgsql()
                 .AddDbContext<DataContext>(c => c.UseNpgsql(this.Configuration.GetConnectionString("LearningTogether")))
                 .BuildServiceProvider();
-            // services.AddDbContext<DataContext>(x => x.UseInMemoryDatabase("TestDb"));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddAutoMapper();
 
-            // configure strongly typed settings objects
             IConfigurationSection appSettingsSection = this.Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
@@ -80,7 +79,6 @@
             services.AddScoped<IUserService, UserService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseCors(x => x
@@ -89,12 +87,10 @@
                 .AllowAnyHeader());
 
             if (env.IsDevelopment())
+            {
                 app.UseDeveloperExceptionPage();
-            else
-                app.UseHsts();
+            }
 
-
-            app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
         }

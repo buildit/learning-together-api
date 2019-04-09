@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "learning-together-api", "learning-together-api\learning-together-api.csproj", "{980EA769-B2D5-4EE1-AC6D-F1EA5C9A7F2F}"
