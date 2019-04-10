@@ -1,9 +1,7 @@
 namespace learning_together_api.Data
 {
-    public abstract class NamedEntity
+    public abstract class NamedEntity : IdEntity
     {
-        public int Id { get; set; }
-
         public string Name { get; set; }
     }
 }

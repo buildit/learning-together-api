@@ -4,10 +4,8 @@ namespace learning_together_api.Data
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("users", Schema = "admin")]
-    public class User
+    public class User : IdEntity
     {
-        public int Id { get; set; }
-
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -27,5 +25,10 @@ namespace learning_together_api.Data
         public Location Location { get; set; }
 
         public ICollection<UserInterest> UserInterests { get; set; }
+    }
+
+    public abstract class IdEntity
+    {
+        public int Id { get; set; }
     }
 }

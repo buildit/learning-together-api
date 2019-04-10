@@ -1,19 +1,15 @@
 namespace learning_together_api.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Data;
     using Exceptions;
     using Microsoft.EntityFrameworkCore;
 
-    public class UserService : IUserService
+    public class UserService : DataQueryService<User>, IUserService
     {
-        private readonly DataContext context;
-
-        public UserService(DataContext context)
-        {
-            this.context = context;
-        }
+        public UserService(DataContext context) : base(context, context.Users) { }
 
         public User Authenticate(string username, string password)
         {
@@ -38,20 +34,6 @@ namespace learning_together_api.Services
 
             // authentication successful
             return user;
-        }
-
-        public IEnumerable<User> GetAll()
-        {
-            return this.context.Users;
-        }
-
-        public User GetById(int id)
-        {
-            return this.context.Users.Where(u => u.Id == id)
-                .Include(u => u.Location)
-                .Include(u => u.Role)
-                .Include(u => u.UserInterests).ThenInclude(ui => ui.Discipline)
-                .FirstOrDefault();
         }
 
         public User Create(User user, string password)
@@ -122,6 +104,20 @@ namespace learning_together_api.Services
                 this.context.Users.Remove(user);
                 this.context.SaveChanges();
             }
+        }
+
+        public override IEnumerable<User> FindByName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public User GetByIdWithIncludes(int id)
+        {
+            return this.context.Users.Where(u => u.Id == id)
+                .Include(u => u.Location)
+                .Include(u => u.Role)
+                .Include(u => u.UserInterests).ThenInclude(ui => ui.Discipline)
+                .FirstOrDefault();
         }
     }
 }
