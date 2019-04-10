@@ -9,6 +9,9 @@ namespace learning_together_api.Data
         {
             this.CreateMap<User, UserDto>();
             this.CreateMap<UserDto, User>();
+            this.CreateMap<UserInterest, DisciplineDto>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.DisciplineId))
+                .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Discipline.Name));
         }
     }
 }
