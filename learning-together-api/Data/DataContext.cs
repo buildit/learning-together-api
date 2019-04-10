@@ -10,6 +10,10 @@ namespace learning_together_api.Data
 
         public DbSet<Discipline> Disciplines { get; set; }
 
+        public DbSet<Role> Roles { get; set; }
+
+        public DbSet<Location> Locations { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserInterest>()

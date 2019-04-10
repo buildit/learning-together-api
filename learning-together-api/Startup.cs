@@ -21,7 +21,7 @@
             this.Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -34,6 +34,33 @@
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddAutoMapper();
 
+            this.SetupJwtAuth(services);
+
+            // configure DI for application services
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IDisciplineService, DisciplineService>();
+        }
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseAuthentication();
+            app.UseMvc();
+        }
+
+        private void SetupJwtAuth(IServiceCollection services)
+        {
             IConfigurationSection appSettingsSection = this.Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
@@ -51,10 +78,9 @@
                     {
                         OnTokenValidated = context =>
                         {
-                            IUserService userService =
-                                context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            IUserService userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                             int userId = int.Parse(context.Principal.Identity.Name);
-                            User user = userService.GetById(userId);
+                            User user = userService.Retrieve(userId);
                             if (user == null)
                             {
                                 // return unauthorized if user no longer exists
@@ -74,25 +100,6 @@
                         ValidateAudience = false
                     };
                 });
-
-            // configure DI for application services
-            services.AddScoped<IUserService, UserService>();
-        }
-
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseAuthentication();
-            app.UseMvc();
         }
     }
 }

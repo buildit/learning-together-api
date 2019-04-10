@@ -6,5 +6,5 @@ namespace learning_together_api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class LearnTogetherController : ControllerBase { }
+    public abstract class LearnTogetherController : ControllerBase { }
 }

@@ -15,11 +15,11 @@ namespace learning_together_api.Data.Mappers
         public string Password { get; set; }
 
         public int? RoleId { get; set; }
-        
+
         public Role Role { get; set; }
 
         public int? LocationId { get; set; }
-        
+
         public Location Location { get; set; }
 
         public List<DisciplineDto> UserInterests { get; set; }

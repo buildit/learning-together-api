@@ -16,10 +16,7 @@ namespace learning_together_api.Controllers
         private readonly IMapper mapper;
         private readonly IUserService userService;
 
-        public UsersController(
-            IUserService userService,
-            IMapper mapper,
-            IOptions<AppSettings> appSettings)
+        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings)
         {
             this.userService = userService;
             this.mapper = mapper;
@@ -39,7 +36,6 @@ namespace learning_together_api.Controllers
 
             string tokenString = SecurityService.GetTokenString(this.appSettings.Secret, user.Id.ToString());
 
-            // return basic user info (without password) and token to store client side
             return this.Ok(new
             {
                 user.Id,
@@ -79,7 +75,7 @@ namespace learning_together_api.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            User user = this.userService.GetById(id);
+            User user = this.userService.GetByIdWithIncludes(id);
             UserDto userDto = this.mapper.Map<UserDto>(user);
             return this.Ok(userDto);
         }
@@ -87,6 +83,11 @@ namespace learning_together_api.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] UserDto userDto)
         {
+            if (id > 0)
+            {
+                return this.BadRequest("Update not yet implemented");
+            }
+
             // map dto to entity and set id
             User user = this.mapper.Map<User>(userDto);
             user.Id = id;
@@ -107,6 +108,11 @@ namespace learning_together_api.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            if (id > 0)
+            {
+                return this.BadRequest("Delete not yet implemented");
+            }
+
             this.userService.Delete(id);
             return this.Ok();
         }
