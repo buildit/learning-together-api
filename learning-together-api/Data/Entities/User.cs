@@ -18,11 +18,11 @@ namespace learning_together_api.Data
 
         public byte[] PasswordSalt { get; set; }
 
-        public int RoleId { get; set; }
+        public int? RoleId { get; set; }
 
         public Role Role { get; set; }
 
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
 
         public Location Location { get; set; }
 
