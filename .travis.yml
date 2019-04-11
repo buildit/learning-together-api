@@ -3,13 +3,13 @@ mono: none
 dotnet: 2.2
 dist: xenial
 script:
- - dotnet restore
-deploy:
-  skip_cleanup: true
-  provider: script
-  script: dotnet publish -c release -r ubuntu.18.04-x64
-  on:
-    branch: test-travis
+ - dotnet publish -c release -r ubuntu.18.04-x64
+# deploy:
+#   skip_cleanup: true
+#   provider: script
+#   script: dotnet publish -c release -r ubuntu.18.04-x64
+#   on:
+#     branch: test-travis
 before_script:
 - openssl aes-256-cbc -K $encrypted_d671cfae17dc_key -iv $encrypted_d671cfae17dc_iv
   -in ltuserssh_rsa.enc -out ./ltuserssh_rsa -d
