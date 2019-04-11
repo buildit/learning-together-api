@@ -24,5 +24,7 @@ namespace learning_together_api.Data
         public string Webex { get; set; }
 
         public ICollection<WorkshopAttendee> WorkshopAttendees { get; set; }
+
+        public ICollection<WorkshopTopic> WorkshopTopics { get; set; }
     }
 }

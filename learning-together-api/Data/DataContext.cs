@@ -39,6 +39,17 @@ namespace learning_together_api.Data
                 .HasOne(e => e.Workshop)
                 .WithMany(e => e.WorkshopAttendees)
                 .HasForeignKey(e => e.WorkshopId);
+
+            modelBuilder.Entity<WorkshopTopic>()
+                .HasKey(e => new { e.WorkshopId, e.DisciplineId });
+            modelBuilder.Entity<WorkshopTopic>()
+                .HasOne(e => e.Workshop)
+                .WithMany(e => e.WorkshopTopics)
+                .HasForeignKey(e => e.WorkshopId);
+            modelBuilder.Entity<WorkshopTopic>()
+                .HasOne(e => e.Discipline)
+                .WithMany(e => e.WorkshopTopics)
+                .HasForeignKey(e => e.DisciplineId);
         }
     }
 }
