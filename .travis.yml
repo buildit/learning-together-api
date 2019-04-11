@@ -1,6 +1,6 @@
 language: csharp
 mono: none
-dotnet: 2.2
+dotnet: 2.2.105
 dist: xenial
 script:
  - dotnet publish -c release -r ubuntu.18.04-x64
