@@ -14,6 +14,8 @@ namespace learning_together_api.Data
 
         public DbSet<Location> Locations { get; set; }
 
+        public DbSet<Workshop> Workshops { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserInterest>()
@@ -26,6 +28,17 @@ namespace learning_together_api.Data
                 .HasOne(e => e.Discipline)
                 .WithMany(e => e.UserInterests)
                 .HasForeignKey(e => e.DisciplineId);
+
+            modelBuilder.Entity<WorkshopAttendee>()
+                .HasKey(e => new { e.UserId, e.WorkshopId });
+            modelBuilder.Entity<WorkshopAttendee>()
+                .HasOne(e => e.User)
+                .WithMany(e => e.WorkshopAttendees)
+                .HasForeignKey(e => e.UserId);
+            modelBuilder.Entity<WorkshopAttendee>()
+                .HasOne(e => e.Workshop)
+                .WithMany(e => e.WorkshopAttendees)
+                .HasForeignKey(e => e.WorkshopId);
         }
     }
 }

@@ -41,6 +41,7 @@
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IDisciplineService, DisciplineService>();
+            services.AddScoped<IWorkshopService, WorkshopService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
