@@ -40,9 +40,13 @@ namespace learningtogetherapi.Migrations
 
                 b.Property<string>("Name");
 
+                b.Property<int?>("ParentDisciplineId");
+
                 b.HasKey("Id");
 
                 b.HasIndex("CategoryId");
+
+                b.HasIndex("ParentDisciplineId");
 
                 b.ToTable("disciplines", "admin");
             });
@@ -172,6 +176,10 @@ namespace learningtogetherapi.Migrations
                     .WithMany()
                     .HasForeignKey("CategoryId")
                     .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne("learning_together_api.Data.Discipline", "ParentDiscipline")
+                    .WithMany()
+                    .HasForeignKey("ParentDisciplineId");
             });
 
             modelBuilder.Entity("learning_together_api.Data.User", b =>

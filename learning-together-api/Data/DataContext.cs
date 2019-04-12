@@ -16,6 +16,8 @@ namespace learning_together_api.Data
 
         public DbSet<Workshop> Workshops { get; set; }
 
+        public DbSet<Category> Categories { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserInterest>()

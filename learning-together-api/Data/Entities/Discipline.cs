@@ -10,6 +10,10 @@ namespace learning_together_api.Data
 
         public Category Category { get; set; }
 
+        public int? ParentDisciplineId { get; set; }
+
+        public Discipline ParentDiscipline { get; set; }
+
         public ICollection<UserInterest> UserInterests { get; set; }
 
         public ICollection<WorkshopTopic> WorkshopTopics { get; set; }
