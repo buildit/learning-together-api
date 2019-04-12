@@ -25,10 +25,7 @@ namespace learning_together_api.Data
         public Location Location { get; set; }
 
         public ICollection<UserInterest> UserInterests { get; set; }
-    }
 
-    public abstract class IdEntity
-    {
-        public int Id { get; set; }
+        public ICollection<WorkshopAttendee> WorkshopAttendees { get; set; }
     }
 }

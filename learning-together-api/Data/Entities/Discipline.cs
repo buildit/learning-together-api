@@ -6,6 +6,12 @@ namespace learning_together_api.Data
     [Table("disciplines", Schema = "admin")]
     public class Discipline : NamedEntity
     {
+        public int CategoryId { get; set; }
+
+        public Category Category { get; set; }
+
         public ICollection<UserInterest> UserInterests { get; set; }
+
+        public ICollection<WorkshopTopic> WorkshopTopics { get; set; }
     }
 }

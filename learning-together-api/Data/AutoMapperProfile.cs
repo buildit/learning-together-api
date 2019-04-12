@@ -14,6 +14,8 @@ namespace learning_together_api.Data
                 .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Discipline.Name));
             this.CreateMap<Discipline, DisciplineDto>();
             this.CreateMap<DisciplineDto, Discipline>();
+            this.CreateMap<WorkshopDto, Workshop>();
+            this.CreateMap<Workshop, WorkshopDto>();
         }
     }
 }
