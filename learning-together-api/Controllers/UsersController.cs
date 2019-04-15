@@ -1,12 +1,18 @@
 namespace learning_together_api.Controllers
 {
+    using System;
     using System.Collections.Generic;
+    using System.Net;
     using AutoMapper;
     using Data;
     using Data.Mappers;
     using Exceptions;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore.Internal;
+    using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Services;
 
@@ -15,10 +21,17 @@ namespace learning_together_api.Controllers
         private readonly AppSettings appSettings;
         private readonly IMapper mapper;
         private readonly IUserService userService;
+        private readonly IImageService imageService;
+        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly ILogger<UsersController> logger;
 
-        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings)
+        // TODO: move logger to base
+        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IImageService imageService, IHostingEnvironment hostingEnvironment, ILogger<UsersController> logger)
         {
             this.userService = userService;
+            this.imageService = imageService;
+            this.hostingEnvironment = hostingEnvironment;
+            this.logger = logger;
             this.mapper = mapper;
             this.appSettings = appSettings.Value;
         }
@@ -102,6 +115,28 @@ namespace learning_together_api.Controllers
             {
                 // return error message if there was an exception
                 return this.BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("avatar"), DisableRequestSizeLimit]
+        public ActionResult UploadFile()
+        {
+            if (this.Request.Form == null || !this.Request.Form.Files.Any())
+            {
+                return this.BadRequest("No images submitted.");
+            }
+
+            try
+            {
+                IFormFile file = this.Request.Form.Files[0];
+                string url = this.imageService.Store(file);
+                return this.Ok(url);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "Could not store image.");
+                return this.StatusCode((int) HttpStatusCode.InternalServerError, $"Upload Failed: {ex.Message}");
             }
         }
 

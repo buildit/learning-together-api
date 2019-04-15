@@ -9,6 +9,8 @@ namespace learning_together_api.Data
     {
         public int EducatorId { get; set; }
 
+        public string ImageUrl { get; set; }
+
         public User Educator { get; set; }
 
         public int LocationId { get; set; }

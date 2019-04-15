@@ -82,6 +82,8 @@ namespace learningtogetherapi.Migrations
 
                 b.Property<string>("FirstName");
 
+                b.Property<string>("ImageUrl");
+
                 b.Property<string>("LastName");
 
                 b.Property<int?>("LocationId");
@@ -126,6 +128,8 @@ namespace learningtogetherapi.Migrations
                 b.Property<int>("EducatorId");
 
                 b.Property<DateTime>("End");
+
+                b.Property<string>("ImageUrl");
 
                 b.Property<int>("LocationId");
 
