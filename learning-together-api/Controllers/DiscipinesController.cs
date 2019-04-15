@@ -5,6 +5,6 @@ namespace learning_together_api.Controllers
 
     public class DisciplinesController : GetDataController<Discipline>
     {
-        public DisciplinesController(IDisciplineService service) : base(service) { }
+        public DisciplinesController(IDisciplineService service, ICategoryService categoryService) : base(service) { }
     }
 }
