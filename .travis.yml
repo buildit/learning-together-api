@@ -2,8 +2,7 @@ language: csharp
 mono: none
 branches:
   only:
-  #  - dev-0.1
-   - travis-restart-server
+   - dev-0.1
 dotnet: 2.2.105
 dist: xenial
 script:
