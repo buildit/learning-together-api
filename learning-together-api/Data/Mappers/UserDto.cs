@@ -22,6 +22,8 @@ namespace learning_together_api.Data.Mappers
 
         public Location Location { get; set; }
 
+        public string ImageUrl { get; set; }
+
         public List<DisciplineDto> UserInterests { get; set; }
     }
 }
