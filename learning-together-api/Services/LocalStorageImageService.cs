@@ -19,7 +19,7 @@ public class LocalStorageImageService : IImageService
 
     public string Store(IFormFile file)
     {
-        string webRoot = this.environment.WebRootPath;
+        string webRoot = this.environment.ContentRootPath;
         string datePath = $"{DateTime.Today.ToShortDateString()}";
         string targetPath = Path.Combine(webRoot, this.appSettings.ImageRootPath, datePath);
 
