@@ -123,6 +123,8 @@ namespace learningtogetherapi.Migrations
                 b.Property<int>("Id")
                     .ValueGeneratedOnAdd();
 
+                b.Property<bool?>("Cancelled");
+
                 b.Property<string>("Description");
 
                 b.Property<int>("EducatorId");
@@ -226,7 +228,7 @@ namespace learningtogetherapi.Migrations
             modelBuilder.Entity("learning_together_api.Data.WorkshopAttendee", b =>
             {
                 b.HasOne("learning_together_api.Data.User", "User")
-                    .WithMany("WorkshopAttendees")
+                    .WithMany("WorkshopsAttending")
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade);
 

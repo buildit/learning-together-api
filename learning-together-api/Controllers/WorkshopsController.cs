@@ -12,10 +12,12 @@ namespace learning_together_api.Controllers
     {
         private readonly IMapper mapper;
         private readonly IWorkshopService service;
+        private readonly IWorkshopAttendeeService workshopAttendeeService;
 
-        public WorkshopsController(IWorkshopService workshopService, IMapper mapper)
+        public WorkshopsController(IWorkshopService workshopService, IWorkshopAttendeeService workshopAttendeeService, IMapper mapper)
         {
             this.service = workshopService;
+            this.workshopAttendeeService = workshopAttendeeService;
             this.mapper = mapper;
         }
 
@@ -46,11 +48,28 @@ namespace learning_together_api.Controllers
             return this.Ok(workshopDtos);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            //User user = this.service.GetByIdWithIncludes(id);
-            //UserDto userDto = this.mapper.Map<UserDto>(user);
+            Workshop workshop = this.service.GetLoaded(id);
+            WorkshopDto dto = this.mapper.Map<WorkshopDto>(workshop);
+            return this.Ok(dto);
+        }
+
+        [HttpPut("{id}/enroll")]
+        public IActionResult Enroll(int id)
+        {
+            int userId = int.Parse(this.User.Identity.Name);
+            this.workshopAttendeeService.Enroll(id, userId);
+            return this.Ok();
+        }
+
+        [HttpDelete("{id}/enroll")]
+        public IActionResult Unenroll(int id)
+        {
+            int userId = int.Parse(this.User.Identity.Name);
+            this.workshopAttendeeService.Unenroll(id, userId);
             return this.Ok();
         }
 

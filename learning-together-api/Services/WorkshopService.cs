@@ -2,6 +2,7 @@ namespace learning_together_api.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Data;
     using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,15 @@ namespace learning_together_api.Services
         public IEnumerable<Workshop> GetLoaded()
         {
             return this.context.Workshops.Include((c => c.Educator)).Include(c => c.Location);
+        }
+
+        public Workshop GetLoaded(int id)
+        {
+            return this.context.Workshops.Where(c => c.Id == id)
+                .Include(c => c.Educator)
+                .Include(c => c.Location)
+                .Include(c => c.WorkshopAttendees)
+                .Include(c => c.WorkshopTopics).FirstOrDefault();
         }
     }
 }

@@ -27,6 +27,6 @@ namespace learning_together_api.Data.Mappers
 
         public string ImageUrl { get; set; }
 
-        public ICollection<WorkshopAttendee> WorkshopUsers { get; set; }
+        public ICollection<WorkshopAttendeeDto> WorkshopAttendees { get; set; }
     }
 }

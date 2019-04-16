@@ -5,8 +5,10 @@ namespace learning_together_api.Services
 
     public interface IWorkshopService : IGetDataService<Workshop>
     {
-        Workshop Create(Workshop workhop);
+        Workshop Create(Workshop workshop);
 
         IEnumerable<Workshop> GetLoaded();
+
+        Workshop GetLoaded(int id);
     }
 }
