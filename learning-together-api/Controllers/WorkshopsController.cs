@@ -41,7 +41,7 @@ namespace learning_together_api.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            IEnumerable<Workshop> workshops = this.service.GetAll();
+            IEnumerable<Workshop> workshops = this.service.GetLoaded();
             IList<WorkshopDto> workshopDtos = this.mapper.Map<IList<WorkshopDto>>(workshops);
             return this.Ok(workshopDtos);
         }

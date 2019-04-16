@@ -3,6 +3,7 @@ namespace learning_together_api.Services
     using System;
     using System.Collections.Generic;
     using Data;
+    using Microsoft.EntityFrameworkCore;
 
     public class WorkshopService : DataQueryService<Workshop>, IWorkshopService
     {
@@ -18,6 +19,11 @@ namespace learning_together_api.Services
             this.context.Workshops.Add(workshop);
             this.context.SaveChanges();
             return workshop;
+        }
+
+        public IEnumerable<Workshop> GetLoaded()
+        {
+            return this.context.Workshops.Include((c => c.Educator)).Include(c => c.Location);
         }
     }
 }
