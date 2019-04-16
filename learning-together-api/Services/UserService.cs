@@ -116,6 +116,8 @@ namespace learning_together_api.Services
             return this.context.Users.Where(u => u.Id == id)
                 .Include(u => u.Location)
                 .Include(u => u.Role)
+                .Include(u => u.WorkshopsAttending).ThenInclude(w => w.Workshop)
+                .Include(u => u.WorkshopsTeaching)
                 .Include(u => u.UserInterests).ThenInclude(ui => ui.Discipline)
                 .FirstOrDefault();
         }

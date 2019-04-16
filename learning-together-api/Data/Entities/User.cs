@@ -26,8 +26,10 @@ namespace learning_together_api.Data
 
         public Location Location { get; set; }
 
+        public ICollection<Workshop> WorkshopsTeaching { get; set; }
+
         public ICollection<UserInterest> UserInterests { get; set; }
 
-        public ICollection<WorkshopAttendee> WorkshopAttendees { get; set; }
+        public ICollection<WorkshopAttendee> WorkshopsAttending { get; set; }
     }
 }

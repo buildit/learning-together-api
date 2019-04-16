@@ -47,6 +47,7 @@
             services.AddScoped<IWorkshopService, WorkshopService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IImageService, LocalStorageImageService>();
+            services.AddScoped<IWorkshopAttendeeService, WorkshopAttendeeService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IOptions<AppSettings> appSettings)
