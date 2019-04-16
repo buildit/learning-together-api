@@ -61,7 +61,7 @@
                 app.UseDeveloperExceptionPage();
             }
 
-            string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", appSettings.Value.ImageRootPath);
+            string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), appSettings.Value.ImageRootPath);
 
             if (!Directory.Exists(uploadPath))
             {

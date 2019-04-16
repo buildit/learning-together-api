@@ -25,6 +25,8 @@ namespace learning_together_api.Data.Mappers
 
         public string Webex { get; set; }
 
+        public string ImageUrl { get; set; }
+
         public ICollection<WorkshopAttendee> WorkshopUsers { get; set; }
     }
 }
