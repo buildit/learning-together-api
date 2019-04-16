@@ -6,7 +6,9 @@ namespace learning_together_api.Controllers
     using Data.Mappers;
     using Exceptions;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Services;
 
@@ -15,10 +17,17 @@ namespace learning_together_api.Controllers
         private readonly AppSettings appSettings;
         private readonly IMapper mapper;
         private readonly IUserService userService;
+        private readonly IImageService imageService;
+        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly ILogger<UsersController> logger;
 
-        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings)
+        // TODO: move logger to base
+        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IImageService imageService, IHostingEnvironment hostingEnvironment, ILogger<UsersController> logger)
         {
             this.userService = userService;
+            this.imageService = imageService;
+            this.hostingEnvironment = hostingEnvironment;
+            this.logger = logger;
             this.mapper = mapper;
             this.appSettings = appSettings.Value;
         }
@@ -42,6 +51,7 @@ namespace learning_together_api.Controllers
                 user.Username,
                 user.FirstName,
                 user.LastName,
+                user.ImageUrl,
                 Token = tokenString
             });
         }

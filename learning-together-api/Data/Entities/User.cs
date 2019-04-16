@@ -6,6 +6,8 @@ namespace learning_together_api.Data
     [Table("users", Schema = "admin")]
     public class User : IdEntity
     {
+        public string ImageUrl { get; set; }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }

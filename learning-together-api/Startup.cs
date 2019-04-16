@@ -1,5 +1,6 @@
 ﻿namespace learning_together_api
 {
+    using System.IO;
     using System.Text;
     using System.Threading.Tasks;
     using AutoMapper;
@@ -11,6 +12,8 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.FileProviders;
+    using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
     using Services;
 
@@ -43,9 +46,10 @@
             services.AddScoped<IDisciplineService, DisciplineService>();
             services.AddScoped<IWorkshopService, WorkshopService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IImageService, LocalStorageImageService>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IOptions<AppSettings> appSettings)
         {
             app.UseCors(x => x
                 .AllowAnyOrigin()
@@ -56,6 +60,18 @@
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", appSettings.Value.ImageRootPath);
+
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(uploadPath), RequestPath = appSettings.Value.StaticServePath
+            });
 
             app.UseAuthentication();
             app.UseMvc();
