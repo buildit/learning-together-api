@@ -25,7 +25,5 @@ namespace learning_together_api.Services
         {
             return this.collection;
         }
-
-        public abstract IEnumerable<T> FindByName(string name);
     }
 }

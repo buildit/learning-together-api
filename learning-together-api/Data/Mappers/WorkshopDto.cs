@@ -3,12 +3,8 @@ namespace learning_together_api.Data.Mappers
     using System;
     using System.Collections.Generic;
 
-    public class WorkshopDto
+    public class WorkshopDto : NamedEntity
     {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
         public int EducatorId { get; set; }
 
         public UserDto Educator { get; set; }

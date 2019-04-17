@@ -1,6 +1,5 @@
 namespace learning_together_api.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Data;
@@ -106,11 +105,6 @@ namespace learning_together_api.Services
             }
         }
 
-        public override IEnumerable<User> FindByName(string name)
-        {
-            throw new NotImplementedException();
-        }
-
         public User GetByIdWithIncludes(int id)
         {
             return this.context.Users.Where(u => u.Id == id)
@@ -120,6 +114,11 @@ namespace learning_together_api.Services
                 .Include(u => u.WorkshopsTeaching)
                 .Include(u => u.UserInterests).ThenInclude(ui => ui.Discipline)
                 .FirstOrDefault();
+        }
+
+        public IEnumerable<User> Search(string search)
+        {
+            return this.context.Users.Where(u => u.FirstName.Contains(search) || u.LastName.Contains(search));
         }
     }
 }
