@@ -25,6 +25,8 @@ namespace learning_together_api.Data
 
         public string Webex { get; set; }
 
+        public string Room { get; set; }
+
         public bool? Cancelled { get; set; }
 
         public int? CategoryId { get; set; }

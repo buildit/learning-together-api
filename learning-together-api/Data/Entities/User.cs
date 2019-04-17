@@ -24,6 +24,8 @@ namespace learning_together_api.Data
 
         public int? LocationId { get; set; }
 
+        public bool? Deactivated { get; set; }
+
         public Location Location { get; set; }
 
         public ICollection<Workshop> WorkshopsTeaching { get; set; }

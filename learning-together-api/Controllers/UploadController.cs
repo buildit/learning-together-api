@@ -13,10 +13,10 @@ namespace learning_together_api.Controllers
     public class UploadController : LearnTogetherController
     {
         private readonly IOptions<AppSettings> appSettings;
-        private readonly IImageService imageService;
+        private readonly IImageStorageService imageService;
         private readonly ILogger<UsersController> logger;
 
-        public UploadController(IOptions<AppSettings> appSettings, IImageService imageService, ILogger<UsersController> logger)
+        public UploadController(IOptions<AppSettings> appSettings, IImageStorageService imageService, ILogger<UsersController> logger)
         {
             this.appSettings = appSettings;
             this.imageService = imageService;

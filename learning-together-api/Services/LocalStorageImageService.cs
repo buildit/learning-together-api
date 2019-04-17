@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-public class LocalStorageImageService : IImageService
+public class LocalStorageImageService : IImageStorageService
 {
     private readonly IHostingEnvironment environment;
     private readonly AppSettings appSettings;

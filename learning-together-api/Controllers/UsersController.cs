@@ -17,12 +17,12 @@ namespace learning_together_api.Controllers
         private readonly AppSettings appSettings;
         private readonly IMapper mapper;
         private readonly IUserService userService;
-        private readonly IImageService imageService;
+        private readonly IImageStorageService imageService;
         private readonly IHostingEnvironment hostingEnvironment;
         private readonly ILogger<UsersController> logger;
 
         // TODO: move logger to base
-        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IImageService imageService, IHostingEnvironment hostingEnvironment, ILogger<UsersController> logger)
+        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IImageStorageService imageService, IHostingEnvironment hostingEnvironment, ILogger<UsersController> logger)
         {
             this.userService = userService;
             this.imageService = imageService;
@@ -64,8 +64,8 @@ namespace learning_together_api.Controllers
 
             try
             {
-                this.userService.Create(user, userDto.Password);
-                return this.Ok();
+                User createdUser = this.userService.Create(user, userDto.Password);
+                return this.Ok(createdUser.Id);
             }
             catch (AppException ex)
             {

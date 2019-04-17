@@ -80,6 +80,8 @@ namespace learningtogetherapi.Migrations
                 b.Property<int>("Id")
                     .ValueGeneratedOnAdd();
 
+                b.Property<bool?>("Deactivated");
+
                 b.Property<string>("FirstName");
 
                 b.Property<string>("ImageUrl");
@@ -138,6 +140,8 @@ namespace learningtogetherapi.Migrations
                 b.Property<int>("LocationId");
 
                 b.Property<string>("Name");
+
+                b.Property<string>("Room");
 
                 b.Property<DateTime>("Start");
 
