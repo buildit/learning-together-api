@@ -46,7 +46,7 @@
             services.AddScoped<IDisciplineService, DisciplineService>();
             services.AddScoped<IWorkshopService, WorkshopService>();
             services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IImageService, LocalStorageImageService>();
+            services.AddScoped<IImageStorageService, LocalStorageImageService>();
             services.AddScoped<IWorkshopAttendeeService, WorkshopAttendeeService>();
         }
 

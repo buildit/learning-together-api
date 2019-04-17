@@ -37,7 +37,7 @@ namespace learning_together_api.Controllers
             workshop.EducatorId = educatorId;
 
             workshop = this.service.Create(workshop);
-            return this.Ok();
+            return this.Ok(workshop.Id);
         }
 
         [AllowAnonymous]
@@ -92,7 +92,8 @@ namespace learning_together_api.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return this.BadRequest("Delete not yet implemented");
+            this.service.Cancel(id);
+            return this.Ok();
         }
     }
 }

@@ -97,10 +97,10 @@ namespace learning_together_api.Services
 
         public void Delete(int id)
         {
-            User user = this.context.Users.Find(id);
+            User user = this.context.Users.FirstOrDefault(u => u.Id == id);
             if (user != null)
             {
-                this.context.Users.Remove(user);
+                user.Deactivated = true;
                 this.context.SaveChanges();
             }
         }

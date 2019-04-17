@@ -33,6 +33,18 @@ namespace learning_together_api.Services
                 .Include(c => c.WorkshopTopics).FirstOrDefault();
         }
 
+        public void Cancel(int id)
+        {
+            Workshop workshop = this.collection.FirstOrDefault(w => w.Id == id);
+            if (workshop == null)
+            {
+                throw new InvalidOperationException($"Could not find workshop with id {id}");
+            }
+
+            workshop.Cancelled = true;
+            this.context.SaveChanges();
+        }
+
         public IQueryable<Workshop> GetByStartDateRange(DateTime startDate, DateTime endDate)
         {
             IQueryable<Workshop> workshops = this.GetLoaded();
