@@ -5,7 +5,7 @@ namespace learning_together_api.Services
     using System.Linq;
     using Data;
 
-    public interface IWorkshopService : IGetDataService<Workshop>
+    public interface IWorkshopService : IGetDataService<Workshop>, ISearchService<Workshop>
     {
         Workshop Create(Workshop workshop);
 

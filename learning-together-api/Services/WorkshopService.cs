@@ -6,14 +6,9 @@ namespace learning_together_api.Services
     using Data;
     using Microsoft.EntityFrameworkCore;
 
-    public class WorkshopService : DataQueryService<Workshop>, IWorkshopService
+    public class WorkshopService : NamedSearchableService<Workshop>, IWorkshopService
     {
         public WorkshopService(DataContext context) : base(context, context.Workshops) { }
-
-        public override IEnumerable<Workshop> FindByName(string name)
-        {
-            throw new NotImplementedException();
-        }
 
         public Workshop Create(Workshop workshop)
         {

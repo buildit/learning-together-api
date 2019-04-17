@@ -2,7 +2,7 @@ namespace learning_together_api.Services
 {
     using Data;
 
-    public interface IUserService : IGetDataService<User>
+    public interface IUserService : IGetDataService<User>, ISearchService<User>
     {
         User Authenticate(string username, string password);
 
