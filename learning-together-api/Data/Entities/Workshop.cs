@@ -27,6 +27,10 @@ namespace learning_together_api.Data
 
         public bool? Cancelled { get; set; }
 
+        public int? CategoryId { get; set; }
+
+        public Category Category { get; set; }
+
         public ICollection<WorkshopAttendee> WorkshopAttendees { get; set; }
 
         public ICollection<WorkshopTopic> WorkshopTopics { get; set; }

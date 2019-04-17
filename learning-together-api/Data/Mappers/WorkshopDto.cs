@@ -15,6 +15,10 @@ namespace learning_together_api.Data.Mappers
 
         public int LocationId { get; set; }
 
+        public int CategoryId { get; set; }
+
+        public Category Category { get; set; }
+
         public Location Location { get; set; }
 
         public string Description { get; set; }

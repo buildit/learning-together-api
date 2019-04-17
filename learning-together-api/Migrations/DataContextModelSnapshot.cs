@@ -125,6 +125,8 @@ namespace learningtogetherapi.Migrations
 
                 b.Property<bool?>("Cancelled");
 
+                b.Property<int?>("CategoryId");
+
                 b.Property<string>("Description");
 
                 b.Property<int>("EducatorId");
@@ -142,6 +144,8 @@ namespace learningtogetherapi.Migrations
                 b.Property<string>("Webex");
 
                 b.HasKey("Id");
+
+                b.HasIndex("CategoryId");
 
                 b.HasIndex("EducatorId");
 
@@ -214,8 +218,12 @@ namespace learningtogetherapi.Migrations
 
             modelBuilder.Entity("learning_together_api.Data.Workshop", b =>
             {
-                b.HasOne("learning_together_api.Data.User", "Educator")
+                b.HasOne("learning_together_api.Data.Category", "Category")
                     .WithMany()
+                    .HasForeignKey("CategoryId");
+
+                b.HasOne("learning_together_api.Data.User", "Educator")
+                    .WithMany("WorkshopsTeaching")
                     .HasForeignKey("EducatorId")
                     .OnDelete(DeleteBehavior.Cascade);
 

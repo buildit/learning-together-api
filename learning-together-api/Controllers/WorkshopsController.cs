@@ -1,5 +1,6 @@
 namespace learning_together_api.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using AutoMapper;
     using Data;
@@ -45,6 +46,15 @@ namespace learning_together_api.Controllers
         {
             IEnumerable<Workshop> workshops = this.service.GetLoaded();
             IList<WorkshopDto> workshopDtos = this.mapper.Map<IList<WorkshopDto>>(workshops);
+            return this.Ok(workshopDtos);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("filter")]
+        public IActionResult GetFiltered(int? categoryId, DateTime? startDate, DateTime? endDate)
+        {
+            IEnumerable<Workshop> filtered = this.service.GetAll(categoryId, startDate, endDate);
+            IList<WorkshopDto> workshopDtos = this.mapper.Map<IList<WorkshopDto>>(filtered);
             return this.Ok(workshopDtos);
         }
 

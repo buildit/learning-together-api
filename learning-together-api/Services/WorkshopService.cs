@@ -22,9 +22,11 @@ namespace learning_together_api.Services
             return workshop;
         }
 
-        public IEnumerable<Workshop> GetLoaded()
+        public IQueryable<Workshop> GetLoaded()
         {
-            return this.context.Workshops.Include((c => c.Educator)).Include(c => c.Location);
+            return this.context.Workshops
+                .Include((c => c.Educator))
+                .Include(c => c.Location);
         }
 
         public Workshop GetLoaded(int id)
@@ -34,6 +36,33 @@ namespace learning_together_api.Services
                 .Include(c => c.Location)
                 .Include(c => c.WorkshopAttendees)
                 .Include(c => c.WorkshopTopics).FirstOrDefault();
+        }
+
+        public IQueryable<Workshop> GetByStartDateRange(DateTime startDate, DateTime endDate)
+        {
+            IQueryable<Workshop> workshops = this.GetLoaded();
+            return workshops.Where(w => w.Start >= startDate && w.Start <= endDate);
+        }
+
+        public IQueryable<Workshop> GetByCategory(int categoryId)
+        {
+            return this.GetLoaded().Where(w => w.CategoryId == categoryId);
+        }
+
+        public IEnumerable<Workshop> GetAll(int? categoryId, DateTime? startDate, DateTime? endDate)
+        {
+            IQueryable<Workshop> workshops = this.GetLoaded();
+            if (categoryId.HasValue)
+            {
+                workshops = workshops.Where(w => w.CategoryId == categoryId);
+            }
+
+            if (startDate.HasValue)
+            {
+                workshops = workshops.Where(w => w.Start >= startDate && w.Start <= endDate);
+            }
+
+            return workshops;
         }
     }
 }
