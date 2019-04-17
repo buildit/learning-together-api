@@ -15,6 +15,7 @@ namespace learning_together_api.Data
             this.CreateMap<WorkshopAttendee, AttendeeWorkshopDto>()
                 .ForMember(d => d.WorkshopId, opt => opt.MapFrom(src => src.WorkshopId))
                 .ForMember(d => d.ImageUrl, opt => opt.MapFrom(src => src.Workshop.ImageUrl))
+                .ForMember(d => d.StartDate, opt => opt.MapFrom(src => src.Workshop.Start))
                 .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Workshop.Name));
             this.CreateMap<WorkshopAttendee, WorkshopAttendeeDto>()
                 .ForMember(d => d.UserId, opt => opt.MapFrom(src => src.UserId))

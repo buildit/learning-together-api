@@ -1,5 +1,7 @@
 namespace learning_together_api.Data.Mappers
 {
+    using System;
+
     public class AttendeeWorkshopDto
     {
         public int WorkshopId { get; set; }
@@ -7,5 +9,7 @@ namespace learning_together_api.Data.Mappers
         public string Name { get; set; }
 
         public string ImageUrl { get; set; }
+
+        public DateTime StartDate { get; set; }
     }
 }
