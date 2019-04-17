@@ -74,6 +74,7 @@ namespace learning_together_api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -82,6 +83,7 @@ namespace learning_together_api.Controllers
             return this.Ok(userDtos);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
