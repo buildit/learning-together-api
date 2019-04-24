@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "learning-together-api", "learning-together-api\learning-together-api.csproj", "{980EA769-B2D5-4EE1-AC6D-F1EA5C9A7F2F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "learning-together-tests", "learning-together-tests\learning-together-tests.csproj", "{4DE0F1F0-6E8C-4166-AAE0-65327DAFC363}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,5 +15,9 @@ Global
 		{980EA769-B2D5-4EE1-AC6D-F1EA5C9A7F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{980EA769-B2D5-4EE1-AC6D-F1EA5C9A7F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{980EA769-B2D5-4EE1-AC6D-F1EA5C9A7F2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DE0F1F0-6E8C-4166-AAE0-65327DAFC363}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DE0F1F0-6E8C-4166-AAE0-65327DAFC363}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DE0F1F0-6E8C-4166-AAE0-65327DAFC363}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DE0F1F0-6E8C-4166-AAE0-65327DAFC363}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

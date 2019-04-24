@@ -19,25 +19,21 @@ namespace learning_together_api.Services
 
             User user = this.context.Users.SingleOrDefault(x => x.Username == username);
 
-            // check if username exists
             if (user == null)
             {
                 return null;
             }
 
-            // check if password is correct
             if (!SecurityService.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
                 return null;
             }
 
-            // authentication successful
             return user;
         }
 
         public User Create(User user, string password)
         {
-            // validation
             if (string.IsNullOrWhiteSpace(password))
             {
                 throw new AppException("Password is required");
