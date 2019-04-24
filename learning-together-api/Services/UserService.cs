@@ -57,7 +57,7 @@ namespace learning_together_api.Services
 
         public void Update(User userParam, string password = null)
         {
-            User user = this.context.Users.Find(userParam.Id);
+            User user = this.context.Users.FirstOrDefault(u => u.Id == userParam.Id);
 
             if (user == null)
             {
@@ -66,7 +66,6 @@ namespace learning_together_api.Services
 
             if (userParam.Username != user.Username)
             {
-                // username has changed so check if the new username is already taken
                 if (this.context.Users.Any(x => x.Username == userParam.Username))
                 {
                     throw new AppException($"Username {userParam.Username} is already taken");

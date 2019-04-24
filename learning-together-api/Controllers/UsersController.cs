@@ -69,7 +69,6 @@ namespace learning_together_api.Controllers
             }
             catch (AppException ex)
             {
-                // return error message if there was an exception
                 return this.BadRequest(new { message = ex.Message });
             }
         }
@@ -95,24 +94,16 @@ namespace learning_together_api.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] UserDto userDto)
         {
-            if (id > 0)
-            {
-                return this.BadRequest("Update not yet implemented");
-            }
-
-            // map dto to entity and set id
             User user = this.mapper.Map<User>(userDto);
             user.Id = id;
 
             try
             {
-                // save 
                 this.userService.Update(user, userDto.Password);
                 return this.Ok();
             }
             catch (AppException ex)
             {
-                // return error message if there was an exception
                 return this.BadRequest(new { message = ex.Message });
             }
         }
