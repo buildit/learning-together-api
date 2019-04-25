@@ -1,5 +1,6 @@
 namespace learning_together_tests
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using learning_together_api.Data;
@@ -38,15 +39,15 @@ namespace learning_together_tests
         }
 
         [Fact]
-        public void UserService_TestUpdate_NewPassword()
+        public void UserService_TestUpdate_Secured()
         {
-            // service.Update(user, "password");
+            throw new NotImplementedException();
         }
 
         [Fact]
-        public void UserService_TestUpdate_NewUsername()
+        public void UserService_TestUpdate_CapturesFields()
         {
-            // service.Update(user, "password");
+            throw new NotImplementedException();
         }
     }
 }
