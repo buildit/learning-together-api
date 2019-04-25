@@ -11,7 +11,8 @@ namespace learning_together_api.Services
 
         public IEnumerable<T> Search(string search)
         {
-            return this.collection.Where(c => c.Name.Contains(search));
+            search = search.ToLower();
+            return this.collection.Where(c => c.Name.ToLower().Contains(search));
         }
     }
 }

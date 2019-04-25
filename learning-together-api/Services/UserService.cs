@@ -121,7 +121,8 @@ namespace learning_together_api.Services
 
         public IEnumerable<User> Search(string search)
         {
-            return this.context.Users.Where(u => u.FirstName.Contains(search) || u.LastName.Contains(search));
+            search = search.ToLower();
+            return this.context.Users.Where(u => u.FirstName.ToLower().Contains(search) || u.LastName.ToLower().Contains(search));
         }
     }
 }
