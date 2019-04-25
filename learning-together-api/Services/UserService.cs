@@ -1,5 +1,6 @@
 namespace learning_together_api.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Data;
@@ -55,9 +56,11 @@ namespace learning_together_api.Services
             return user;
         }
 
-        public void Update(User userParam, string password = null)
+        public void Update(int userId, User userParam, string password = null)
         {
-            User user = this.context.Users.Find(userParam.Id);
+            if (userId != userParam.Id) throw new UnauthorizedAccessException();
+
+            User user = this.context.Users.FirstOrDefault(u => u.Id == userParam.Id);
 
             if (user == null)
             {
@@ -66,17 +69,11 @@ namespace learning_together_api.Services
 
             if (userParam.Username != user.Username)
             {
-                // username has changed so check if the new username is already taken
                 if (this.context.Users.Any(x => x.Username == userParam.Username))
                 {
                     throw new AppException($"Username {userParam.Username} is already taken");
                 }
             }
-
-            // update user properties
-            user.FirstName = userParam.FirstName;
-            user.LastName = userParam.LastName;
-            user.Username = userParam.Username;
 
             // update password if it was entered
             if (!string.IsNullOrWhiteSpace(password))
@@ -87,12 +84,22 @@ namespace learning_together_api.Services
                 user.PasswordSalt = passwordSalt;
             }
 
+            // update user properties
+            user.FirstName = userParam.FirstName;
+            user.LastName = userParam.LastName;
+            user.Username = userParam.Username;
+            user.ImageUrl = userParam.ImageUrl;
+            user.LocationId = userParam.LocationId;
+            user.RoleId = userParam.RoleId;
+
             this.context.Users.Update(user);
             this.context.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void Delete(int userId, int id)
         {
+            if (userId != id) throw new UnauthorizedAccessException();
+
             User user = this.context.Users.FirstOrDefault(u => u.Id == id);
             if (user != null)
             {

@@ -33,7 +33,7 @@ namespace learning_together_api.Services
                 .Include(c => c.WorkshopTopics).FirstOrDefault();
         }
 
-        public void Cancel(int id)
+        public void Cancel(int userId, int id)
         {
             Workshop workshop = this.collection.FirstOrDefault(w => w.Id == id);
             if (workshop == null)
@@ -70,6 +70,25 @@ namespace learning_together_api.Services
             }
 
             return workshops;
+        }
+
+        public void Update(int userId, int id, Workshop workshop)
+        {
+            Workshop oldWorkshop = this.context.Workshops.First(w => w.Id == id);
+            if (userId != oldWorkshop.EducatorId) throw new UnauthorizedAccessException();
+
+            oldWorkshop.ImageUrl = workshop.ImageUrl;
+            oldWorkshop.LocationId = workshop.LocationId;
+            oldWorkshop.End = workshop.End;
+            oldWorkshop.Room = workshop.Room;
+            oldWorkshop.Start = workshop.Start;
+            oldWorkshop.Webex = workshop.Webex;
+            oldWorkshop.CategoryId = workshop.CategoryId;
+            oldWorkshop.Name = workshop.Name;
+            oldWorkshop.Description = workshop.Description;
+
+            this.context.Workshops.Update(oldWorkshop);
+            this.context.SaveChanges();
         }
     }
 }

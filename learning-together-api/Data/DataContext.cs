@@ -4,23 +4,25 @@ namespace learning_together_api.Data
 
     public class DataContext : DbContext
     {
+        public DataContext() { }
+
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
-        public DbSet<Discipline> Disciplines { get; set; }
+        public virtual DbSet<Discipline> Disciplines { get; set; }
 
-        public DbSet<Role> Roles { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
 
-        public DbSet<Location> Locations { get; set; }
+        public virtual DbSet<Location> Locations { get; set; }
 
-        public DbSet<Workshop> Workshops { get; set; }
+        public virtual DbSet<Workshop> Workshops { get; set; }
 
-        public DbSet<WorkshopAttendee> WorkshopAttendees { get; set; }
+        public virtual DbSet<WorkshopAttendee> WorkshopAttendees { get; set; }
 
-        public DbSet<UserInterest> UserInterests { get; set; }
+        public virtual DbSet<UserInterest> UserInterests { get; set; }
 
-        public DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

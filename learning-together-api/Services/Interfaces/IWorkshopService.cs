@@ -13,12 +13,14 @@ namespace learning_together_api.Services
 
         Workshop GetLoaded(int id);
 
-        void Cancel(int id);
+        void Cancel(int userId, int id);
 
         IQueryable<Workshop> GetByStartDateRange(DateTime startDate, DateTime endDate);
 
         IQueryable<Workshop> GetByCategory(int categoryId);
 
         IEnumerable<Workshop> GetAll(int? categoryId, DateTime? startDate, DateTime? endDate);
+
+        void Update(int userId, int id, Workshop dto);
     }
 }

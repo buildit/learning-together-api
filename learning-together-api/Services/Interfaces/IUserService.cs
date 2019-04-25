@@ -8,9 +8,9 @@ namespace learning_together_api.Services
 
         User Create(User user, string password);
 
-        void Update(User user, string password = null);
+        void Update(int userId, User user, string password = null);
 
-        void Delete(int id);
+        void Delete(int userId, int id);
 
         User GetByIdWithIncludes(int id);
     }

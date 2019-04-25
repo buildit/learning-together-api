@@ -84,15 +84,19 @@ namespace learning_together_api.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] UserDto userDto)
+        public IActionResult Update(int id, [FromBody] WorkshopDto dto)
         {
-            return this.BadRequest("Update not yet implemented");
+            int userId = int.Parse(this.User.Identity.Name);
+            Workshop workshop = this.mapper.Map<Workshop>(dto);
+            this.service.Update(userId, id, workshop);
+            return this.Ok();
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            this.service.Cancel(id);
+            int userId = int.Parse(this.User.Identity.Name);
+            this.service.Cancel(userId, id);
             return this.Ok();
         }
     }
