@@ -101,11 +101,10 @@ namespace learning_together_api.Services
             if (userId != id) throw new UnauthorizedAccessException();
 
             User user = this.context.Users.FirstOrDefault(u => u.Id == id);
-            if (user != null)
-            {
-                user.Deactivated = true;
-                this.context.SaveChanges();
-            }
+            if (user == null) return;
+
+            user.Deactivated = true;
+            this.context.SaveChanges();
         }
 
         public User GetByIdWithIncludes(int id)

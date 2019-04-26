@@ -14,9 +14,9 @@ namespace learning_together_tests
         [Fact]
         public void UserService_TestCreate_HashAndSaltPw()
         {
-            var mockSet = new Mock<DbSet<User>>();
-            var mockContext = new Mock<DataContext>();
-            var users = new List<User> { }.AsQueryable();
+            Mock<DbSet<User>> mockSet = new Mock<DbSet<User>>();
+            Mock<DataContext> mockContext = new Mock<DataContext>();
+            IQueryable<User> users = new List<User> { }.AsQueryable();
 
             mockSet.As<IQueryable<User>>().Setup(m => m.Provider).Returns(users.Provider);
             mockSet.As<IQueryable<User>>().Setup(m => m.Expression).Returns(users.Expression);
@@ -25,7 +25,7 @@ namespace learning_together_tests
 
             mockContext.Setup(m => m.Users).Returns(mockSet.Object);
 
-            var service = new UserService(mockContext.Object);
+            UserService service = new UserService(mockContext.Object);
             User user = new User();
             user.Username = "testUser";
             user.RoleId = 1;

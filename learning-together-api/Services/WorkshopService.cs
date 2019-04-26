@@ -29,7 +29,7 @@ namespace learning_together_api.Services
             return this.context.Workshops.Where(c => c.Id == id)
                 .Include(c => c.Educator)
                 .Include(c => c.Location)
-                .Include(c => c.WorkshopAttendees)
+                .Include(c => c.WorkshopAttendees).ThenInclude(wa => wa.User)
                 .Include(c => c.WorkshopTopics).FirstOrDefault();
         }
 
