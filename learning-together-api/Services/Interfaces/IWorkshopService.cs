@@ -9,7 +9,7 @@ namespace learning_together_api.Services
     {
         Workshop Create(Workshop workshop);
 
-        IQueryable<Workshop> GetLoaded();
+        IQueryable<Workshop> GetLoaded(bool initFilters = true);
 
         Workshop GetLoaded(int id);
 
@@ -19,7 +19,7 @@ namespace learning_together_api.Services
 
         IQueryable<Workshop> GetByCategory(int categoryId);
 
-        IEnumerable<Workshop> GetAll(int? categoryId, DateTime? startDate, DateTime? endDate);
+        IEnumerable<Workshop> GetAll(int? categoryId, int? locationId, DateTime? startDate, DateTime? endDate);
 
         void Update(int userId, int id, Workshop dto);
     }

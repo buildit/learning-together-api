@@ -15,7 +15,8 @@ namespace learning_together_api.Controllers
         private readonly IWorkshopService service;
         private readonly IWorkshopAttendeeService workshopAttendeeService;
 
-        public WorkshopsController(IWorkshopService workshopService, IWorkshopAttendeeService workshopAttendeeService, IMapper mapper)
+        public WorkshopsController(IWorkshopService workshopService, IWorkshopAttendeeService workshopAttendeeService,
+            IMapper mapper)
         {
             this.service = workshopService;
             this.workshopAttendeeService = workshopAttendeeService;
@@ -27,7 +28,7 @@ namespace learning_together_api.Controllers
         {
             if (!this.TryValidateModel(dto))
             {
-                return this.BadRequest(new { message = "Something's wrong." });
+                return this.BadRequest(new {message = "Something's wrong."});
             }
 
             int educatorId = int.Parse(this.User.Identity.Name);
@@ -51,9 +52,9 @@ namespace learning_together_api.Controllers
 
         [AllowAnonymous]
         [HttpGet("filter")]
-        public IActionResult GetFiltered(int? categoryId, DateTime? startDate, DateTime? endDate)
+        public IActionResult GetFiltered(int? categoryId, int? locationId, DateTime? startDate, DateTime? endDate)
         {
-            IEnumerable<Workshop> filtered = this.service.GetAll(categoryId, startDate, endDate);
+            IEnumerable<Workshop> filtered = this.service.GetAll(categoryId, locationId, startDate, endDate);
             IList<WorkshopDto> workshopDtos = this.mapper.Map<IList<WorkshopDto>>(filtered);
             return this.Ok(workshopDtos);
         }
