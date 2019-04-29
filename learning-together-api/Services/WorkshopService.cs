@@ -8,7 +8,9 @@ namespace learning_together_api.Services
 
     public class WorkshopService : NamedSearchableService<Workshop>, IWorkshopService
     {
-        public WorkshopService(DataContext context) : base(context, context.Workshops) { }
+        public WorkshopService(DataContext context) : base(context, context.Workshops)
+        {
+        }
 
         public Workshop Create(Workshop workshop)
         {
@@ -17,9 +19,16 @@ namespace learning_together_api.Services
             return workshop;
         }
 
-        public IQueryable<Workshop> GetLoaded()
+        public IQueryable<Workshop> GetLoaded(bool initFilters = true)
         {
-            return this.context.Workshops
+            IQueryable<Workshop> contextWorkshops = this.context.Workshops;
+
+            if (initFilters)
+            {
+                contextWorkshops = contextWorkshops.Where(w => w.Cancelled != true && w.Start >= DateTime.Today);
+            }
+
+            return contextWorkshops
                 .Include((c => c.Educator))
                 .Include(c => c.Location);
         }
@@ -41,7 +50,10 @@ namespace learning_together_api.Services
                 throw new InvalidOperationException($"Could not find workshop with id {id}");
             }
 
+            if (userId != workshop.EducatorId) throw new UnauthorizedAccessException();
+
             workshop.Cancelled = true;
+            this.context.Workshops.Update(workshop);
             this.context.SaveChanges();
         }
 
@@ -56,7 +68,7 @@ namespace learning_together_api.Services
             return this.GetLoaded().Where(w => w.CategoryId == categoryId);
         }
 
-        public IEnumerable<Workshop> GetAll(int? categoryId, DateTime? startDate, DateTime? endDate)
+        public IEnumerable<Workshop> GetAll(int? categoryId, int? locationId, DateTime? startDate, DateTime? endDate)
         {
             IQueryable<Workshop> workshops = this.GetLoaded();
             if (categoryId.HasValue)
@@ -67,6 +79,11 @@ namespace learning_together_api.Services
             if (startDate.HasValue)
             {
                 workshops = workshops.Where(w => w.Start >= startDate && w.Start <= endDate);
+            }
+
+            if (locationId.HasValue)
+            {
+                workshops = workshops.Where(w => w.LocationId == locationId);
             }
 
             return workshops;
