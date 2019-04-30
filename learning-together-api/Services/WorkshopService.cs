@@ -6,11 +6,9 @@ namespace learning_together_api.Services
     using Data;
     using Microsoft.EntityFrameworkCore;
 
-    public class WorkshopService : NamedSearchableService<Workshop>, IWorkshopService
+    public class WorkshopService : DataQueryService<Workshop>, IWorkshopService
     {
-        public WorkshopService(DataContext context) : base(context, context.Workshops)
-        {
-        }
+        public WorkshopService(DataContext context) : base(context, context.Workshops) { }
 
         public Workshop Create(Workshop workshop)
         {
@@ -106,6 +104,12 @@ namespace learning_together_api.Services
 
             this.context.Workshops.Update(oldWorkshop);
             this.context.SaveChanges();
+        }
+
+        public IEnumerable<Workshop> Search(string search)
+        {
+            search = search.ToLower();
+            return this.GetLoaded().Where(w => w.Name.ToLower().Contains(search));
         }
     }
 }
