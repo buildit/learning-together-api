@@ -1,5 +1,6 @@
 namespace learning_together_api.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using AutoMapper;
     using Data;
@@ -15,11 +16,11 @@ namespace learning_together_api.Controllers
     public class UsersController : LearnTogetherController
     {
         private readonly AppSettings appSettings;
+        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IImageStorageService imageService;
+        private readonly ILogger<UsersController> logger;
         private readonly IMapper mapper;
         private readonly IUserService userService;
-        private readonly IImageStorageService imageService;
-        private readonly IHostingEnvironment hostingEnvironment;
-        private readonly ILogger<UsersController> logger;
 
         // TODO: move logger to base
         public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IImageStorageService imageService, IHostingEnvironment hostingEnvironment, ILogger<UsersController> logger)
@@ -32,18 +33,18 @@ namespace learning_together_api.Controllers
             this.appSettings = appSettings.Value;
         }
 
-        [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] UserDto userDto)
         {
-            User user = this.userService.Authenticate(userDto.Username, userDto.Password);
+            User user = this.userService.Retrieve(userDto.Username);
 
             if (user == null)
             {
-                return this.BadRequest(new { message = "Username or password is incorrect" });
+                // Do new user reg workflow
+                throw new NotImplementedException();
             }
 
-            string tokenString = SecurityService.GetTokenString(this.appSettings.Secret, user.Id.ToString());
+            string tokenString = this.Request.Headers["Bearer"]; // SecurityService.GetTokenString(this.appSettings.Secret, user.Id.ToString());
 
             return this.Ok(new
             {

@@ -13,5 +13,7 @@ namespace learning_together_api.Services
         void Delete(int userId, int id);
 
         User GetByIdWithIncludes(int id);
+
+        User Retrieve(string username);
     }
 }

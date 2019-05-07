@@ -131,6 +131,11 @@ namespace learning_together_api.Services
             return first;
         }
 
+        public User Retrieve(string username)
+        {
+            return this.context.Users.FirstOrDefault(u => u.Username == username);
+        }
+
         public IEnumerable<User> Search(string search)
         {
             search = search.ToLower();
