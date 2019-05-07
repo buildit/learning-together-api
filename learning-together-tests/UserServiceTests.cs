@@ -33,9 +33,6 @@ namespace learning_together_tests
             user.ImageUrl = "https://dogeplanet.com";
             user.FirstName = "First";
             user.LastName = "Last";
-            // service.Create(user, "password");
-
-            mockSet.Verify(m => m.Add(It.Is<User>(u => u.PasswordHash != null && u.PasswordSalt != null)));
         }
 
         [Fact]

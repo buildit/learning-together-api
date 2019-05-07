@@ -7,16 +7,17 @@ namespace learning_together_api.Controllers
     using Data.Mappers;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Caching.Memory;
     using Services;
 
-    public class WorkshopsController : LearnTogetherController
+    public class WorkshopsController : UserCacheLearnTogetherController
     {
         private readonly IMapper mapper;
         private readonly IWorkshopService service;
         private readonly IWorkshopAttendeeService workshopAttendeeService;
 
-        public WorkshopsController(IWorkshopService workshopService, IWorkshopAttendeeService workshopAttendeeService,
-            IMapper mapper)
+        public WorkshopsController(IWorkshopService workshopService, IWorkshopAttendeeService workshopAttendeeService, IMapper mapper, IUserService userService, IMemoryCache memoryCache)
+            : base(userService, memoryCache)
         {
             this.service = workshopService;
             this.workshopAttendeeService = workshopAttendeeService;
@@ -26,12 +27,9 @@ namespace learning_together_api.Controllers
         [HttpPost("create")]
         public IActionResult Create([FromBody] WorkshopDto dto)
         {
-            if (!this.TryValidateModel(dto))
-            {
-                return this.BadRequest(new {message = "Something's wrong."});
-            }
+            if (!this.TryValidateModel(dto)) return this.BadRequest(new {message = "Something's wrong."});
 
-            int educatorId = int.Parse(this.User.Identity.Name);
+            int educatorId = this.GetUserId(this.User.Identity.Name);
 
             Workshop workshop = this.mapper.Map<Workshop>(dto);
 
@@ -71,7 +69,7 @@ namespace learning_together_api.Controllers
         [HttpPut("{id}/enroll")]
         public IActionResult Enroll(int id)
         {
-            int userId = int.Parse(this.User.Identity.Name);
+            int userId = this.GetUserId(this.User.Identity.Name);
             this.workshopAttendeeService.Enroll(id, userId);
             return this.Ok();
         }
@@ -79,7 +77,7 @@ namespace learning_together_api.Controllers
         [HttpDelete("{id}/enroll")]
         public IActionResult Unenroll(int id)
         {
-            int userId = int.Parse(this.User.Identity.Name);
+            int userId = this.GetUserId(this.User.Identity.Name);
             this.workshopAttendeeService.Unenroll(id, userId);
             return this.Ok();
         }
@@ -87,7 +85,7 @@ namespace learning_together_api.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] WorkshopDto dto)
         {
-            int userId = int.Parse(this.User.Identity.Name);
+            int userId = this.GetUserId(this.User.Identity.Name);
             Workshop workshop = this.mapper.Map<Workshop>(dto);
             this.service.Update(userId, id, workshop);
             return this.Ok();
@@ -96,7 +94,7 @@ namespace learning_together_api.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            int userId = int.Parse(this.User.Identity.Name);
+            int userId = this.GetUserId(this.User.Identity.Name);
             this.service.Cancel(userId, id);
             return this.Ok();
         }

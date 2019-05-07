@@ -4,13 +4,9 @@ namespace learning_together_api.Services
 
     public interface IUserService : IGetDataService<User>, ISearchService<User>
     {
-        User Authenticate(string username, string password);
-
         User Create(User user);
 
-        User Create(User user, string password);
-
-        void Update(int userId, User user, string password = null);
+        void Update(int userId, User user);
 
         void Delete(int userId, int id);
 

@@ -218,10 +218,6 @@ namespace learningtogetherapi.Migrations
 
                 b.Property<int?>("LocationId");
 
-                b.Property<byte[]>("PasswordHash");
-
-                b.Property<byte[]>("PasswordSalt");
-
                 b.Property<int?>("RoleId");
 
                 b.Property<string>("Username");
