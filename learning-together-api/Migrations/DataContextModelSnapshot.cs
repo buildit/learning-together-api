@@ -9,14 +9,14 @@ namespace learningtogetherapi.Migrations
     using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    internal class DataContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("learning_together_api.Data.Category", b =>
@@ -29,6 +29,58 @@ namespace learningtogetherapi.Migrations
                 b.HasKey("Id");
 
                 b.ToTable("category", "admin");
+
+                b.HasData(
+                    new
+                    {
+                        Id = 1,
+                        Name = "Professional Development"
+                    },
+                    new
+                    {
+                        Id = 2,
+                        Name = "Emotional Intelligence"
+                    },
+                    new
+                    {
+                        Id = 3,
+                        Name = "Teamwork"
+                    },
+                    new
+                    {
+                        Id = 4,
+                        Name = "Leadership"
+                    },
+                    new
+                    {
+                        Id = 5,
+                        Name = "Design"
+                    },
+                    new
+                    {
+                        Id = 6,
+                        Name = "Analytics"
+                    },
+                    new
+                    {
+                        Id = 7,
+                        Name = "Culture"
+                    },
+                    new
+                    {
+                        Id = 8,
+                        Name = "Agile / Lean"
+                    },
+                    new
+                    {
+                        Id = 9,
+                        Name = "Artificial Intelligence"
+                    },
+                    new
+                    {
+                        Id = 10,
+                        Name = "Technology"
+                    });
             });
 
             modelBuilder.Entity("learning_together_api.Data.Discipline", b =>
@@ -61,6 +113,38 @@ namespace learningtogetherapi.Migrations
                 b.HasKey("Id");
 
                 b.ToTable("locations", "admin");
+
+                b.HasData(
+                    new
+                    {
+                        Id = 2,
+                        Name = "London"
+                    },
+                    new
+                    {
+                        Id = 1,
+                        Name = "Brooklyn"
+                    },
+                    new
+                    {
+                        Id = 3,
+                        Name = "Edinburgh"
+                    },
+                    new
+                    {
+                        Id = 4,
+                        Name = "Dublin"
+                    },
+                    new
+                    {
+                        Id = 5,
+                        Name = "Denver"
+                    },
+                    new
+                    {
+                        Id = 6,
+                        Name = "Dallas"
+                    });
             });
 
             modelBuilder.Entity("learning_together_api.Data.Role", b =>
@@ -73,6 +157,48 @@ namespace learningtogetherapi.Migrations
                 b.HasKey("Id");
 
                 b.ToTable("roles", "admin");
+
+                b.HasData(
+                    new
+                    {
+                        Id = 1,
+                        Name = "Creative Technologist"
+                    },
+                    new
+                    {
+                        Id = 2,
+                        Name = "Frontend"
+                    },
+                    new
+                    {
+                        Id = 3,
+                        Name = "Backend"
+                    },
+                    new
+                    {
+                        Id = 4,
+                        Name = "Fullstack"
+                    },
+                    new
+                    {
+                        Id = 5,
+                        Name = "Design"
+                    },
+                    new
+                    {
+                        Id = 6,
+                        Name = "Product"
+                    },
+                    new
+                    {
+                        Id = 7,
+                        Name = "Delivery"
+                    },
+                    new
+                    {
+                        Id = 8,
+                        Name = "Leadership"
+                    });
             });
 
             modelBuilder.Entity("learning_together_api.Data.User", b =>
@@ -81,6 +207,8 @@ namespace learningtogetherapi.Migrations
                     .ValueGeneratedOnAdd();
 
                 b.Property<bool?>("Deactivated");
+
+                b.Property<string>("DirectoryName");
 
                 b.Property<string>("FirstName");
 

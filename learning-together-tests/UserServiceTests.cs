@@ -16,7 +16,7 @@ namespace learning_together_tests
         {
             Mock<DbSet<User>> mockSet = new Mock<DbSet<User>>();
             Mock<DataContext> mockContext = new Mock<DataContext>();
-            IQueryable<User> users = new List<User> { }.AsQueryable();
+            IQueryable<User> users = new List<User>().AsQueryable();
 
             mockSet.As<IQueryable<User>>().Setup(m => m.Provider).Returns(users.Provider);
             mockSet.As<IQueryable<User>>().Setup(m => m.Expression).Returns(users.Expression);
@@ -33,19 +33,19 @@ namespace learning_together_tests
             user.ImageUrl = "https://dogeplanet.com";
             user.FirstName = "First";
             user.LastName = "Last";
-            service.Create(user, "password");
+            // service.Create(user, "password");
 
             mockSet.Verify(m => m.Add(It.Is<User>(u => u.PasswordHash != null && u.PasswordSalt != null)));
         }
 
         [Fact]
-        public void UserService_TestUpdate_Secured()
+        public void UserService_TestUpdate_CapturesFields()
         {
             throw new NotImplementedException();
         }
 
         [Fact]
-        public void UserService_TestUpdate_CapturesFields()
+        public void UserService_TestUpdate_Secured()
         {
             throw new NotImplementedException();
         }

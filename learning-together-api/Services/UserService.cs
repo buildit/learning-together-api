@@ -6,44 +6,60 @@ namespace learning_together_api.Services
     using Data;
     using Exceptions;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
 
     public class UserService : DataQueryService<User>, IUserService
     {
-        public UserService(DataContext context) : base(context, context.Users) { }
+        public UserService(DataContext context) : base(context, context.Users)
+        {
+        }
 
         public User Authenticate(string username, string password)
         {
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-            {
-                return null;
-            }
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) return null;
 
             User user = this.context.Users.SingleOrDefault(x => x.Username == username);
 
-            if (user == null)
-            {
-                return null;
-            }
+            if (user == null) return null;
 
-            if (!SecurityService.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
-            {
-                return null;
-            }
+            if (!SecurityService.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt)) return null;
 
             return user;
         }
 
-        public User Create(User user, string password)
+        public User Create(User user)
         {
-            if (string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrEmpty(user.Username)) throw new AppException("Invalid username passed to the service");
+
+            User existingUser = this.Retrieve(user.Username);
+
+            Func<User> func;
+            if (existingUser == null)
             {
-                throw new AppException("Password is required");
+                EntityEntry<User> entityEntry = this.context.Users.Add(user);
+                func = () => entityEntry.Entity;
+            }
+            else if (existingUser.DirectoryName != user.DirectoryName)
+            {
+                existingUser.DirectoryName = user.DirectoryName;
+                func = () => existingUser;
+            }
+            else
+            {
+                throw new AppException($"A user with username {user.Username} already exists.");
             }
 
-            if (this.context.Users.Any(x => x.Username == user.Username))
-            {
-                throw new AppException($"Username {user.Username} is already taken");
-            }
+            this.context.SaveChanges();
+
+            return func();
+        }
+
+        [Obsolete("No longer doing authentication in-house")]
+        public User Create(User user, string password)
+        {
+            if (string.IsNullOrWhiteSpace(password)) throw new AppException("Password is required");
+
+            if (this.context.Users.Any(x => x.Username == user.Username)) throw new AppException($"Username {user.Username} is already taken");
 
             SecurityService.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
@@ -62,18 +78,11 @@ namespace learning_together_api.Services
 
             User user = this.context.Users.FirstOrDefault(u => u.Id == userParam.Id);
 
-            if (user == null)
-            {
-                throw new AppException("User not found");
-            }
+            if (user == null) throw new AppException("User not found");
 
             if (userParam.Username != user.Username)
-            {
                 if (this.context.Users.Any(x => x.Username == userParam.Username))
-                {
                     throw new AppException($"Username {userParam.Username} is already taken");
-                }
-            }
 
             // update password if it was entered
             if (!string.IsNullOrWhiteSpace(password))
@@ -129,6 +138,21 @@ namespace learning_together_api.Services
                 .Load();
 
             return first;
+        }
+
+        public User Retrieve(string username)
+        {
+            return this.context.Users.FirstOrDefault(u => u.Username == username);
+        }
+
+        public User RetrieveOrCreate(string username, string name)
+        {
+            User user = this.context.Users.FirstOrDefault(u => u.Username == username && u.DirectoryName == name);
+
+            if (user != null || string.IsNullOrEmpty(username)) return user;
+
+            user = new User(username, name);
+            return this.Create(user);
         }
 
         public IEnumerable<User> Search(string search)

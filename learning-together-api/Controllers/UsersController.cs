@@ -15,11 +15,11 @@ namespace learning_together_api.Controllers
     public class UsersController : LearnTogetherController
     {
         private readonly AppSettings appSettings;
+        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IImageStorageService imageService;
+        private readonly ILogger<UsersController> logger;
         private readonly IMapper mapper;
         private readonly IUserService userService;
-        private readonly IImageStorageService imageService;
-        private readonly IHostingEnvironment hostingEnvironment;
-        private readonly ILogger<UsersController> logger;
 
         // TODO: move logger to base
         public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IImageStorageService imageService, IHostingEnvironment hostingEnvironment, ILogger<UsersController> logger)
@@ -32,22 +32,22 @@ namespace learning_together_api.Controllers
             this.appSettings = appSettings.Value;
         }
 
-        [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] UserDto userDto)
         {
-            User user = this.userService.Authenticate(userDto.Username, userDto.Password);
+            string authenticatedEmail = this.User.Claims.GetEmail();
+            string authenticatedName = this.User.Claims.GetName();
 
-            if (user == null)
-            {
-                return this.BadRequest(new { message = "Username or password is incorrect" });
-            }
+            if (authenticatedEmail != userDto.Username) return this.BadRequest("Token and e-mail do not match.");
 
-            string tokenString = SecurityService.GetTokenString(this.appSettings.Secret, user.Id.ToString());
+            User user = this.userService.RetrieveOrCreate(authenticatedEmail, authenticatedName);
+
+            string tokenString = this.Request.Headers["Bearer"];
 
             return this.Ok(new
             {
                 user.Id,
+                user.DirectoryName,
                 user.Username,
                 user.FirstName,
                 user.LastName,
@@ -69,7 +69,7 @@ namespace learning_together_api.Controllers
             }
             catch (AppException ex)
             {
-                return this.BadRequest(new { message = ex.Message });
+                return this.BadRequest(new {message = ex.Message});
             }
         }
 
@@ -105,7 +105,7 @@ namespace learning_together_api.Controllers
             }
             catch (AppException ex)
             {
-                return this.BadRequest(new { message = ex.Message });
+                return this.BadRequest(new {message = ex.Message});
             }
         }
 
@@ -114,10 +114,7 @@ namespace learning_together_api.Controllers
         {
             int userId = int.Parse(this.User.Identity.Name);
 
-            if (id > 0)
-            {
-                return this.BadRequest("Delete not yet implemented");
-            }
+            if (id > 0) return this.BadRequest("Delete not yet implemented");
 
             this.userService.Delete(userId, id);
             return this.Ok();
