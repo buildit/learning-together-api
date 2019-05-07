@@ -1,6 +1,5 @@
 namespace learning_together_api.Controllers
 {
-    using System;
     using System.Collections.Generic;
     using AutoMapper;
     using Data;
@@ -36,19 +35,19 @@ namespace learning_together_api.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] UserDto userDto)
         {
-            User user = this.userService.Retrieve(userDto.Username);
+            string authenticatedEmail = this.User.Claims.GetEmail();
+            string authenticatedName = this.User.Claims.GetName();
 
-            if (user == null)
-            {
-                // Do new user reg workflow
-                throw new NotImplementedException();
-            }
+            if (authenticatedEmail != userDto.Username) return this.BadRequest("Token and e-mail do not match.");
 
-            string tokenString = this.Request.Headers["Bearer"]; // SecurityService.GetTokenString(this.appSettings.Secret, user.Id.ToString());
+            User user = this.userService.RetrieveOrCreate(authenticatedEmail, authenticatedName);
+
+            string tokenString = this.Request.Headers["Bearer"];
 
             return this.Ok(new
             {
                 user.Id,
+                user.DirectoryName,
                 user.Username,
                 user.FirstName,
                 user.LastName,
@@ -70,7 +69,7 @@ namespace learning_together_api.Controllers
             }
             catch (AppException ex)
             {
-                return this.BadRequest(new { message = ex.Message });
+                return this.BadRequest(new {message = ex.Message});
             }
         }
 
@@ -106,7 +105,7 @@ namespace learning_together_api.Controllers
             }
             catch (AppException ex)
             {
-                return this.BadRequest(new { message = ex.Message });
+                return this.BadRequest(new {message = ex.Message});
             }
         }
 
@@ -115,10 +114,7 @@ namespace learning_together_api.Controllers
         {
             int userId = int.Parse(this.User.Identity.Name);
 
-            if (id > 0)
-            {
-                return this.BadRequest("Delete not yet implemented");
-            }
+            if (id > 0) return this.BadRequest("Delete not yet implemented");
 
             this.userService.Delete(userId, id);
             return this.Ok();

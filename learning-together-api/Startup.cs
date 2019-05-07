@@ -1,5 +1,6 @@
 ﻿namespace learning_together_api
 {
+    using System;
     using System.IO;
     using System.Text;
     using System.Threading.Tasks;
@@ -14,6 +15,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Options;
+    using Microsoft.IdentityModel.Logging;
     using Microsoft.IdentityModel.Tokens;
     using Services;
 
@@ -37,7 +39,11 @@
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddAutoMapper();
 
-            this.SetupJwtAuth(services);
+            IConfigurationSection appSettingsSection = this.Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+
+            // this.SetupJwtAuth(services);
+            this.SetupAzureAdAuth(services);
 
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
@@ -50,24 +56,30 @@
             services.AddScoped<IWorkshopAttendeeService, WorkshopAttendeeService>();
         }
 
+        private void SetupAzureAdAuth(IServiceCollection services)
+        {
+            services
+                .AddAuthentication(sharedOptions => { sharedOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
+                .AddJwtBearer(options =>
+                {
+                    options.Audience = this.Configuration["AzureAd:ClientId"];
+                    options.Authority = $"{this.Configuration["AzureAd:Instance"]}{this.Configuration["AzureAd:TenantId"]}";
+                });
+        }
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IOptions<AppSettings> appSettings)
         {
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                IdentityModelEventSource.ShowPII = true;
             }
 
             string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), appSettings.Value.ImageRootPath);
 
-            if (!Directory.Exists(uploadPath))
-            {
-                Directory.CreateDirectory(uploadPath);
-            }
+            if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
 
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -78,6 +90,7 @@
             app.UseMvc();
         }
 
+        [Obsolete]
         private void SetupJwtAuth(IServiceCollection services)
         {
             IConfigurationSection appSettingsSection = this.Configuration.GetSection("AppSettings");
@@ -97,14 +110,13 @@
                     {
                         OnTokenValidated = context =>
                         {
-                            IUserService userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            IUserService userService =
+                                context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                             int userId = int.Parse(context.Principal.Identity.Name);
                             User user = userService.Retrieve(userId);
                             if (user == null)
-                            {
                                 // return unauthorized if user no longer exists
                                 context.Fail("Unauthorized");
-                            }
 
                             return Task.CompletedTask;
                         }

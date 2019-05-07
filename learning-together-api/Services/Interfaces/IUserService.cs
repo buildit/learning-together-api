@@ -6,6 +6,8 @@ namespace learning_together_api.Services
     {
         User Authenticate(string username, string password);
 
+        User Create(User user);
+
         User Create(User user, string password);
 
         void Update(int userId, User user, string password = null);
@@ -15,5 +17,7 @@ namespace learning_together_api.Services
         User GetByIdWithIncludes(int id);
 
         User Retrieve(string username);
+
+        User RetrieveOrCreate(string authenticatedEmail, string userName);
     }
 }
