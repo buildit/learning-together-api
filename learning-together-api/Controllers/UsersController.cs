@@ -8,26 +8,30 @@ namespace learning_together_api.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Services;
 
-    public class UsersController : LearnTogetherController
+    public class UsersController : UserCacheLearnTogetherController
     {
         private readonly AppSettings appSettings;
         private readonly IHostingEnvironment hostingEnvironment;
         private readonly IImageStorageService imageService;
         private readonly ILogger<UsersController> logger;
         private readonly IMapper mapper;
+        private readonly IMemoryCache memoryCache;
         private readonly IUserService userService;
 
         // TODO: move logger to base
-        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IImageStorageService imageService, IHostingEnvironment hostingEnvironment, ILogger<UsersController> logger)
+        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IImageStorageService imageService, IHostingEnvironment hostingEnvironment, ILogger<UsersController> logger, IMemoryCache memoryCache)
+            : base(userService, memoryCache)
         {
             this.userService = userService;
             this.imageService = imageService;
             this.hostingEnvironment = hostingEnvironment;
             this.logger = logger;
+            this.memoryCache = memoryCache;
             this.mapper = mapper;
             this.appSettings = appSettings.Value;
         }
@@ -64,7 +68,7 @@ namespace learning_together_api.Controllers
 
             try
             {
-                User createdUser = this.userService.Create(user, userDto.Password);
+                User createdUser = this.userService.Create(user);
                 return this.Ok(createdUser.Id);
             }
             catch (AppException ex)
@@ -94,13 +98,13 @@ namespace learning_together_api.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] UserDto userDto)
         {
-            int userId = int.Parse(this.User.Identity.Name);
+            int userId = this.GetUserId(this.User.Identity.Name);
             User user = this.mapper.Map<User>(userDto);
             user.Id = id;
 
             try
             {
-                this.userService.Update(userId, user, userDto.Password);
+                this.userService.Update(userId, user);
                 return this.Ok();
             }
             catch (AppException ex)
@@ -112,7 +116,7 @@ namespace learning_together_api.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            int userId = int.Parse(this.User.Identity.Name);
+            int userId = this.GetUserId(this.User.Identity.Name);
 
             if (id > 0) return this.BadRequest("Delete not yet implemented");
 

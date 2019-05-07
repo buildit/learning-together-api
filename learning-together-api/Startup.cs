@@ -1,9 +1,6 @@
 ﻿namespace learning_together_api
 {
-    using System;
     using System.IO;
-    using System.Text;
-    using System.Threading.Tasks;
     using AutoMapper;
     using Data;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,7 +13,6 @@
     using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Logging;
-    using Microsoft.IdentityModel.Tokens;
     using Services;
 
     public class Startup
@@ -35,6 +31,7 @@
             services.AddEntityFrameworkNpgsql()
                 .AddDbContext<DataContext>(c => c.UseNpgsql(this.Configuration.GetConnectionString("LearningTogether")))
                 .BuildServiceProvider();
+            services.AddMemoryCache();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddAutoMapper();
@@ -88,49 +85,6 @@
 
             app.UseAuthentication();
             app.UseMvc();
-        }
-
-        [Obsolete]
-        private void SetupJwtAuth(IServiceCollection services)
-        {
-            IConfigurationSection appSettingsSection = this.Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-
-            // configure jwt authentication
-            AppSettings appSettings = appSettingsSection.Get<AppSettings>();
-            byte[] key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            services.AddAuthentication(x =>
-                {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x =>
-                {
-                    x.Events = new JwtBearerEvents
-                    {
-                        OnTokenValidated = context =>
-                        {
-                            IUserService userService =
-                                context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                            int userId = int.Parse(context.Principal.Identity.Name);
-                            User user = userService.Retrieve(userId);
-                            if (user == null)
-                                // return unauthorized if user no longer exists
-                                context.Fail("Unauthorized");
-
-                            return Task.CompletedTask;
-                        }
-                    };
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
         }
     }
 }
