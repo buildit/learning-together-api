@@ -23,6 +23,7 @@ namespace learning_together_api.Services
             Func<User> func;
             if (existingUser == null)
             {
+                user.ImageUrl = IdentityExtensions.IdentityConstants.DefaultAvatar;
                 EntityEntry<User> entityEntry = this.context.Users.Add(user);
                 func = () => entityEntry.Entity;
             }
@@ -35,6 +36,7 @@ namespace learning_together_api.Services
             {
                 throw new AppException($"A user with username {user.Username} already exists.");
             }
+            
 
             this.context.SaveChanges();
 
