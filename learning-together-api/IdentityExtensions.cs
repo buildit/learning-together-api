@@ -20,6 +20,7 @@ namespace learning_together_api
         {
             public const string Email = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
             public const string Name = "name";
+            public const string DefaultAvatar = "/images/cover/profile-placeholder.png";
         }
     }
 }
