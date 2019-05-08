@@ -51,14 +51,9 @@ namespace learning_together_api.Services
 
             if (user == null) throw new AppException("User not found");
 
-            if (userParam.Username != user.Username)
-                if (this.context.Users.Any(x => x.Username == userParam.Username))
-                    throw new AppException($"Username {userParam.Username} is already taken");
-
             // update user properties
             user.FirstName = userParam.FirstName;
             user.LastName = userParam.LastName;
-            user.Username = userParam.Username;
             user.ImageUrl = userParam.ImageUrl;
             user.LocationId = userParam.LocationId;
             user.RoleId = userParam.RoleId;
