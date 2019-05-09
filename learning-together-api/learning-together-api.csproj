@@ -1,80 +1,81 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-      <TargetLatestRuntimePatch>false</TargetLatestRuntimePatch>
-      <Configurations>Debug;Release;Test</Configurations>
-      <Platforms>AnyCPU</Platforms>
-  </PropertyGroup>
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <TargetLatestRuntimePatch>false</TargetLatestRuntimePatch>
+        <Configurations>Debug;Release;Test</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+    <ItemGroup>
+        <Folder Include="wwwroot\" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="8.0.0" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
-      <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
-      <PackageReference Include="Serilog.Sinks.PostgreSQL" Version="2.1.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="8.0.0" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
+        <PackageReference Include="Serilog.Sinks.PostgreSQL" Version="2.1.0" />
+    </ItemGroup>
+    
 
-  <ItemGroup>
-    <ProjectReference Include="..\pathways-common\pathways-common.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="uploads\**" />
+        <Compile Remove="obj\**" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="uploads\**" />
-    <Compile Remove="obj\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Remove="uploads\**" />
+        <EmbeddedResource Remove="obj\**" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Remove="uploads\**" />
-    <EmbeddedResource Remove="obj\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Remove="uploads\**" />
+        <None Remove="obj\**" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="uploads\**" />
-    <None Remove="obj\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <Content Remove="uploads\**" />
+        <Content Remove="obj\**" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Content Remove="uploads\**" />
-    <Content Remove="obj\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <_ResolveComReferenceCache Remove="obj\Debug\netcoreapp2.2\learning-together-api.csproj.ResolveComReference.cache" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <_ResolveComReferenceCache Remove="obj\Debug\netcoreapp2.2\learning-together-api.csproj.ResolveComReference.cache" />
-  </ItemGroup>
+    <ItemGroup>
+        <IntermediateAssembly Remove="obj\Debug\netcoreapp2.2\learning-together-api.dll" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <IntermediateAssembly Remove="obj\Debug\netcoreapp2.2\learning-together-api.dll" />
-  </ItemGroup>
+    <ItemGroup>
+        <_DebugSymbolsIntermediatePath Remove="obj\Debug\netcoreapp2.2\learning-together-api.pdb" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <_DebugSymbolsIntermediatePath Remove="obj\Debug\netcoreapp2.2\learning-together-api.pdb" />
-  </ItemGroup>
+    <ItemGroup>
+        <_DeploymentManifestEntryPoint Remove="obj\Debug\netcoreapp2.2\learning-together-api.dll" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <_DeploymentManifestEntryPoint Remove="obj\Debug\netcoreapp2.2\learning-together-api.dll" />
-  </ItemGroup>
+    <ItemGroup>
+        <ApplicationManifest Remove="obj\Debug\netcoreapp2.2\learning-together-api.dll.manifest" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ApplicationManifest Remove="obj\Debug\netcoreapp2.2\learning-together-api.dll.manifest" />
-  </ItemGroup>
+    <ItemGroup>
+        <DeployManifest Remove="obj\Debug\netcoreapp2.2\learning-together-api.application" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <DeployManifest Remove="obj\Debug\netcoreapp2.2\learning-together-api.application" />
-  </ItemGroup>
+    <ItemGroup>
+        <RazorIntermediateAssembly Remove="obj\Debug\netcoreapp2.2\learning-together-api.Views.dll" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <RazorIntermediateAssembly Remove="obj\Debug\netcoreapp2.2\learning-together-api.Views.dll" />
-  </ItemGroup>
+    <ItemGroup>
+        <_RazorDebugSymbolsIntermediatePath Remove="obj\Debug\netcoreapp2.2\learning-together-api.Views.pdb" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <_RazorDebugSymbolsIntermediatePath Remove="obj\Debug\netcoreapp2.2\learning-together-api.Views.pdb" />
-  </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\pathways-common\pathways-common.csproj" />
+    </ItemGroup>
 
 </Project>
