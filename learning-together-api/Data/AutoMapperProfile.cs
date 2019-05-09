@@ -12,6 +12,11 @@ namespace learning_together_api.Data
             this.CreateMap<UserInterest, DisciplineDto>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.DisciplineId))
                 .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Discipline.Name));
+            this.CreateMap<DisciplineDto, UserInterest>()
+                .ForMember(d => d.DisciplineId, opt => opt.MapFrom(src => src.Id));
+            this.CreateMap<WorkshopTopic, DisciplineDto>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Discipline.Id))
+                .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Discipline.Name));
             this.CreateMap<WorkshopAttendee, AttendeeWorkshopDto>()
                 .ForMember(d => d.WorkshopId, opt => opt.MapFrom(src => src.WorkshopId))
                 .ForMember(d => d.ImageUrl, opt => opt.MapFrom(src => src.Workshop.ImageUrl))

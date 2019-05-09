@@ -33,5 +33,7 @@ namespace learning_together_api.Data.Mappers
         public bool Cancelled { get; set; }
 
         public ICollection<WorkshopAttendeeDto> WorkshopAttendees { get; set; }
+
+        public ICollection<DisciplineDto> WorkshopTopics { get; set; }
     }
 }

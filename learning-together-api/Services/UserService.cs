@@ -10,9 +10,7 @@ namespace learning_together_api.Services
 
     public class UserService : DataQueryService<User>, IUserService
     {
-        public UserService(DataContext context) : base(context, context.Users)
-        {
-        }
+        public UserService(DataContext context) : base(context, context.Users) { }
 
         public User Create(User user)
         {
@@ -36,7 +34,6 @@ namespace learning_together_api.Services
             {
                 throw new AppException($"A user with username {user.Username} already exists.");
             }
-            
 
             this.context.SaveChanges();
 
@@ -57,6 +54,8 @@ namespace learning_together_api.Services
             user.ImageUrl = userParam.ImageUrl;
             user.LocationId = userParam.LocationId;
             user.RoleId = userParam.RoleId;
+
+            this.UpdateDisciplineAssociations(userId, userParam);
 
             this.context.Users.Update(user);
             this.context.SaveChanges();
@@ -116,6 +115,19 @@ namespace learning_together_api.Services
         {
             search = search.ToLower();
             return this.context.Users.Where(u => u.FirstName.ToLower().Contains(search) || u.LastName.ToLower().Contains(search));
+        }
+
+        private void UpdateDisciplineAssociations(int userId, User userParam)
+        {
+            IQueryable<UserInterest> existingInterests = this.context.UserInterests.Where(i => i.UserId == userId);
+
+            if (existingInterests.Any()) this.context.UserInterests.RemoveRange(existingInterests);
+
+            foreach (UserInterest newInterest in userParam.UserInterests)
+            {
+                newInterest.UserId = userId;
+                this.context.UserInterests.Add(newInterest);
+            }
         }
     }
 }
