@@ -24,6 +24,8 @@ namespace learning_together_api.Data.Mappers
 
         public bool Deactivated { get; set; }
 
+        public string DirectoryName { get; set; }
+
         public List<DisciplineDto> UserInterests { get; set; }
 
         public List<AttendeeWorkshopDto> WorkshopsAttending { get; set; }
