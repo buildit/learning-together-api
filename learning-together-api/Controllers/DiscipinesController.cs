@@ -4,13 +4,15 @@ namespace learning_together_api.Controllers
     using Data;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using pathways_common.Controllers;
     using Services;
 
     public class DisciplinesController : GetDataController<Discipline>
     {
         private readonly ICategoryService categoryService;
 
-        public DisciplinesController(IDisciplineService service, ICategoryService categoryService) : base(service)
+        public DisciplinesController(IDisciplineService service, ICategoryService categoryService) 
+            : base(service)
         {
             this.categoryService = categoryService;
         }

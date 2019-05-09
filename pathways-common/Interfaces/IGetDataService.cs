@@ -1,10 +1,8 @@
-namespace learning_together_api.Services
+namespace pathways_common.Interfaces
 {
     using System.Collections.Generic;
-    using Data;
 
     public interface IGetDataService<out T>
-        where T : IdEntity
     {
         T Retrieve(int id);
 

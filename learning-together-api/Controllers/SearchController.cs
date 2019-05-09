@@ -7,9 +7,10 @@ namespace learning_together_api.Controllers
     using Data.Mappers;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using pathways_common.Controllers;
     using Services;
 
-    public class SearchController : LearnTogetherController
+    public class SearchController : ApiController
     {
         private readonly IWorkshopService workshopService;
         private readonly IUserService userService;

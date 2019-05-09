@@ -1,15 +1,16 @@
-namespace learning_together_api.Controllers
+namespace pathways_common.Controllers
 {
     using System;
+    using Interfaces;
     using Microsoft.Extensions.Caching.Memory;
-    using Services;
 
-    public abstract class UserCacheLearnTogetherController : LearnTogetherController
+    public abstract class CacheResolvingController<T> : ApiController
+        where T : INamedEntity
     {
         private readonly IMemoryCache memoryCache;
-        private readonly IUserService userService;
+        private readonly IResolveService<T> userService;
 
-        protected UserCacheLearnTogetherController(IUserService userService, IMemoryCache memoryCache)
+        protected CacheResolvingController(IResolveService<T> userService, IMemoryCache memoryCache)
         {
             this.userService = userService;
             this.memoryCache = memoryCache;

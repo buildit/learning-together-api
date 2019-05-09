@@ -2,6 +2,7 @@ namespace learning_together_api.Data
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
+    using pathways_common.Entities;
 
     [Table("disciplines", Schema = "admin")]
     public class Discipline : NamedEntity

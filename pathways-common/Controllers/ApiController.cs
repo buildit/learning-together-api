@@ -1,4 +1,4 @@
-namespace learning_together_api.Controllers
+namespace pathways_common.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -6,7 +6,7 @@ namespace learning_together_api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public abstract class LearnTogetherController : ControllerBase
+    public abstract class ApiController : ControllerBase
     {
     }
 }

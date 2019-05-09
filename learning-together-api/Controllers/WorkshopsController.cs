@@ -10,7 +10,7 @@ namespace learning_together_api.Controllers
     using Microsoft.Extensions.Caching.Memory;
     using Services;
 
-    public class WorkshopsController : UserCacheLearnTogetherController
+    public class WorkshopsController : UserCacheController
     {
         private readonly IMapper mapper;
         private readonly IWorkshopService service;

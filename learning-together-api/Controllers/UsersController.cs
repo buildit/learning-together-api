@@ -13,7 +13,7 @@ namespace learning_together_api.Controllers
     using Microsoft.Extensions.Options;
     using Services;
 
-    public class UsersController : UserCacheLearnTogetherController
+    public class UsersController : UserCacheController
     {
         private readonly AppSettings appSettings;
         private readonly IHostingEnvironment hostingEnvironment;

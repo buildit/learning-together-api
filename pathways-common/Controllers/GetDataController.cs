@@ -1,13 +1,11 @@
-namespace learning_together_api.Controllers
+namespace pathways_common.Controllers
 {
     using System.Collections.Generic;
-    using Data;
+    using Interfaces;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Services;
 
-    public class GetDataController<T> : LearnTogetherController
-        where T : IdEntity
+    public class GetDataController<T> : ApiController
     {
         private readonly IGetDataService<T> service;
 
