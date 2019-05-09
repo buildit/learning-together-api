@@ -1,6 +1,8 @@
-namespace learning_together_api.Data
+namespace pathways_common.Entities
 {
-    public abstract class IdEntity
+    using Interfaces;
+
+    public abstract class IdEntity : IIdEntity
     {
         protected IdEntity()
         {

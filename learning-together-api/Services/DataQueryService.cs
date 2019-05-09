@@ -3,9 +3,10 @@ namespace learning_together_api.Services
     using System.Collections.Generic;
     using System.Linq;
     using Data;
+    using pathways_common.Interfaces;
 
     public abstract class DataQueryService<T> : IGetDataService<T>
-        where T : IdEntity
+        where T : IIdEntity
     {
         protected readonly IEnumerable<T> collection;
         protected readonly DataContext context;

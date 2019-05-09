@@ -1,8 +1,9 @@
 namespace learning_together_api.Services
 {
     using Data;
+    using pathways_common.Interfaces;
 
-    public interface IUserService : IGetDataService<User>, ISearchService<User>
+    public interface IUserService : IGetDataService<User>, ISearchService<User>, IResolveService<User>
     {
         User Create(User user);
 
@@ -11,8 +12,6 @@ namespace learning_together_api.Services
         void Delete(int userId, int id);
 
         User GetByIdWithIncludes(int id);
-
-        User Retrieve(string username);
 
         User RetrieveOrCreate(string authenticatedEmail, string userName);
     }

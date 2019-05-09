@@ -3,6 +3,7 @@ namespace learning_together_api.Services
     using System.Collections.Generic;
     using System.Linq;
     using Data;
+    using pathways_common.Entities;
 
     public abstract class NamedSearchableService<T> : DataQueryService<T>
         where T : NamedEntity

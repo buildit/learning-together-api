@@ -2,6 +2,7 @@ namespace learning_together_api.Data.Mappers
 {
     using System;
     using System.Collections.Generic;
+    using pathways_common.Entities;
 
     public class WorkshopDto : NamedEntity
     {

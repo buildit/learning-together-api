@@ -3,6 +3,7 @@ namespace learning_together_api.Data
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
+    using pathways_common.Entities;
 
     [Table("workshops", Schema = "workshop")]
     public class Workshop : NamedEntity

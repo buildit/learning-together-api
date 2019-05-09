@@ -8,9 +8,10 @@ namespace learning_together_api.Controllers
     using Microsoft.EntityFrameworkCore.Internal;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+    using pathways_common.Controllers;
     using Services;
 
-    public class UploadController : LearnTogetherController
+    public class UploadController : ApiController
     {
         private readonly IOptions<AppSettings> appSettings;
         private readonly IImageStorageService imageService;
