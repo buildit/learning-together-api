@@ -14,6 +14,10 @@ namespace learning_together_api.Services
         {
             this.context.Workshops.Add(workshop);
             this.context.SaveChanges();
+
+            this.SetWorkshopDiscipline(workshop.Id, workshop.CategoryId);
+            this.context.SaveChanges();
+
             return workshop;
         }
 
@@ -27,7 +31,7 @@ namespace learning_together_api.Services
             }
 
             return contextWorkshops
-                .Include((c => c.Educator))
+                .Include(c => c.Educator)
                 .Include(c => c.Location);
         }
 
@@ -36,8 +40,9 @@ namespace learning_together_api.Services
             return this.context.Workshops.Where(c => c.Id == id)
                 .Include(c => c.Educator)
                 .Include(c => c.Location)
+                .Include(c => c.Category)
                 .Include(c => c.WorkshopAttendees).ThenInclude(wa => wa.User)
-                .Include(c => c.WorkshopTopics).FirstOrDefault();
+                .Include(c => c.WorkshopTopics).ThenInclude(wt => wt.Discipline).FirstOrDefault();
         }
 
         public void Cancel(int userId, int id)
@@ -102,6 +107,8 @@ namespace learning_together_api.Services
             oldWorkshop.Name = workshop.Name;
             oldWorkshop.Description = workshop.Description;
 
+            this.SetWorkshopDiscipline(id, workshop.CategoryId);
+
             this.context.Workshops.Update(oldWorkshop);
             this.context.SaveChanges();
         }
@@ -110,6 +117,20 @@ namespace learning_together_api.Services
         {
             search = search.ToLower();
             return this.GetLoaded().Where(w => w.Name.ToLower().Contains(search));
+        }
+
+        private void SetWorkshopDiscipline(int id, int? workshopCategoryId)
+        {
+            IQueryable<WorkshopTopic> workshopTopics = this.context.WorkshopTopics.Where(w => w.WorkshopId == id);
+
+            if (workshopTopics.Any()) this.context.WorkshopTopics.RemoveRange(workshopTopics);
+
+            if (workshopCategoryId.HasValue)
+            {
+                Discipline discipline = this.context.Disciplines.First(w => w.CategoryId == workshopCategoryId);
+                WorkshopTopic wt = new WorkshopTopic(id, discipline.Id);
+                this.context.WorkshopTopics.Add(wt);
+            }
         }
     }
 }

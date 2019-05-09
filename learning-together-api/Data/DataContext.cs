@@ -4,14 +4,10 @@ namespace learning_together_api.Data
 
     public class DataContext : DbContext
     {
-        public DataContext()
-        {
-        }
+        public DataContext() { }
 
         public DataContext(DbContextOptions<DataContext> options)
-            : base(options)
-        {
-        }
+            : base(options) { }
 
         public virtual DbSet<User> Users { get; set; }
 
@@ -27,12 +23,14 @@ namespace learning_together_api.Data
 
         public virtual DbSet<UserInterest> UserInterests { get; set; }
 
+        public virtual DbSet<WorkshopTopic> WorkshopTopics { get; set; }
+
         public virtual DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserInterest>()
-                .HasKey(e => new {e.UserId, e.DisciplineId});
+                .HasKey(e => new { e.UserId, e.DisciplineId });
             modelBuilder.Entity<UserInterest>()
                 .HasOne(e => e.User)
                 .WithMany(e => e.UserInterests)
@@ -43,7 +41,7 @@ namespace learning_together_api.Data
                 .HasForeignKey(e => e.DisciplineId);
 
             modelBuilder.Entity<WorkshopAttendee>()
-                .HasKey(e => new {e.UserId, e.WorkshopId});
+                .HasKey(e => new { e.UserId, e.WorkshopId });
             modelBuilder.Entity<WorkshopAttendee>()
                 .HasOne(e => e.User)
                 .WithMany(e => e.WorkshopsAttending)
@@ -54,7 +52,7 @@ namespace learning_together_api.Data
                 .HasForeignKey(e => e.WorkshopId);
 
             modelBuilder.Entity<WorkshopTopic>()
-                .HasKey(e => new {e.WorkshopId, e.DisciplineId});
+                .HasKey(e => new { e.WorkshopId, e.DisciplineId });
             modelBuilder.Entity<WorkshopTopic>()
                 .HasOne(e => e.Workshop)
                 .WithMany(e => e.WorkshopTopics)
