@@ -75,7 +75,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\pathways-common\pathways-common.csproj" />
+      <ProjectReference Include="..\pathways-netcore-webapi-common\pathways-common.csproj" />
     </ItemGroup>
 
 </Project>

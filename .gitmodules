@@ -1,0 +1,3 @@
+[submodule "pathways-netcore-webapi-common"]
+	path = pathways-netcore-webapi-common
+	url = git@github.com:buildit/pathways-netcore-webapi-common.git

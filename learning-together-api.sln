@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "learning-together-api", "le
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "learning-together-tests", "learning-together-tests\learning-together-tests.csproj", "{4DE0F1F0-6E8C-4166-AAE0-65327DAFC363}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pathways-common", "pathways-common\pathways-common.csproj", "{AEAD7B53-9C31-4F60-A21C-F30EFA327AF3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pathways-common", "pathways-netcore-webapi-common\pathways-common.csproj", "{849DD24C-C951-47FB-878E-7E2D755BEAE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,11 +24,12 @@ Global
 		{4DE0F1F0-6E8C-4166-AAE0-65327DAFC363}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DE0F1F0-6E8C-4166-AAE0-65327DAFC363}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{4DE0F1F0-6E8C-4166-AAE0-65327DAFC363}.Test|Any CPU.Build.0 = Debug|Any CPU
-		{AEAD7B53-9C31-4F60-A21C-F30EFA327AF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AEAD7B53-9C31-4F60-A21C-F30EFA327AF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AEAD7B53-9C31-4F60-A21C-F30EFA327AF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AEAD7B53-9C31-4F60-A21C-F30EFA327AF3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AEAD7B53-9C31-4F60-A21C-F30EFA327AF3}.Test|Any CPU.ActiveCfg = Debug|Any CPU
-		{AEAD7B53-9C31-4F60-A21C-F30EFA327AF3}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{4DE0F1F0-6E8C-4166-AAE0-65327DAFC363}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{849DD24C-C951-47FB-878E-7E2D755BEAE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{849DD24C-C951-47FB-878E-7E2D755BEAE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{849DD24C-C951-47FB-878E-7E2D755BEAE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{849DD24C-C951-47FB-878E-7E2D755BEAE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{849DD24C-C951-47FB-878E-7E2D755BEAE2}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{849DD24C-C951-47FB-878E-7E2D755BEAE2}.Test|Any CPU.Build.0 = Test|Any CPU
 	EndGlobalSection
 EndGlobal
