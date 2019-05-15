@@ -4,16 +4,18 @@ namespace learning_together_api.Controllers
     using AutoMapper;
     using Data;
     using Data.Mappers;
-    using Exceptions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+    using pathways_common;
+    using pathways_common.Controllers;
+    using pathways_common.Extensions;
     using Services;
 
-    public class UsersController : UserCacheController
+    public class UsersController : CacheResolvingController<User>
     {
         private readonly AppSettings appSettings;
         private readonly IHostingEnvironment hostingEnvironment;

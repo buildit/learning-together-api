@@ -4,13 +4,16 @@ namespace learning_together_api.Services
     using System.Collections.Generic;
     using System.Linq;
     using Data;
-    using Exceptions;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
+    using pathways_common;
+    using pathways_common.Extensions;
 
-    public class UserService : DataQueryService<User>, IUserService
+    public class UserService : LearningTogetherDataQueryService<User>, IUserService
     {
-        public UserService(DataContext context) : base(context, context.Users) { }
+        public UserService(DataContext context) : base(context, context.Users)
+        {
+        }
 
         public User Create(User user)
         {
@@ -40,10 +43,8 @@ namespace learning_together_api.Services
             return func();
         }
 
-        public void Update(int userId, User userParam)
+        public void Update(User userParam)
         {
-            if (userId != userParam.Id) throw new UnauthorizedAccessException();
-
             User user = this.context.Users.FirstOrDefault(u => u.Id == userParam.Id);
 
             if (user == null) throw new AppException("User not found");
@@ -55,21 +56,33 @@ namespace learning_together_api.Services
             user.LocationId = userParam.LocationId;
             user.RoleId = userParam.RoleId;
 
-            this.UpdateDisciplineAssociations(userId, userParam);
+            this.UpdateDisciplineAssociations(user.Id, userParam);
 
             this.context.Users.Update(user);
             this.context.SaveChanges();
+        }
+
+        public void Delete(int id)
+        {
+            User user = this.context.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null) return;
+
+            user.Deactivated = true;
+            this.context.SaveChanges();
+        }
+
+        public void Update(int userId, User userParam)
+        {
+            if (userId != userParam.Id) throw new UnauthorizedAccessException();
+
+            this.Update(userParam);
         }
 
         public void Delete(int userId, int id)
         {
             if (userId != id) throw new UnauthorizedAccessException();
 
-            User user = this.context.Users.FirstOrDefault(u => u.Id == id);
-            if (user == null) return;
-
-            user.Deactivated = true;
-            this.context.SaveChanges();
+            this.Delete(id);
         }
 
         public User GetByIdWithIncludes(int id)
@@ -103,7 +116,7 @@ namespace learning_together_api.Services
 
         public User RetrieveOrCreate(string username, string name)
         {
-            User user = this.context.Users.FirstOrDefault(u => u.Username == username && u.DirectoryName == name);
+            User user = this.collection.FirstOrDefault(u => u.Username == username && u.DirectoryName == name);
 
             if (user != null || string.IsNullOrEmpty(username)) return user;
 
