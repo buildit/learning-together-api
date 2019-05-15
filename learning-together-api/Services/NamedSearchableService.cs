@@ -5,10 +5,12 @@ namespace learning_together_api.Services
     using Data;
     using pathways_common.Entities;
 
-    public abstract class NamedSearchableService<T> : DataQueryService<T>
+    public abstract class NamedSearchableService<T> : LearningTogetherDataQueryService<T>
         where T : NamedEntity
     {
-        protected NamedSearchableService(DataContext context, IEnumerable<T> collection) : base(context, collection) { }
+        protected NamedSearchableService(DataContext context, IEnumerable<T> collection) : base(context, collection)
+        {
+        }
 
         public IEnumerable<T> Search(string search)
         {

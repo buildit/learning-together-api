@@ -6,9 +6,11 @@ namespace learning_together_api.Services
     using Data;
     using Microsoft.EntityFrameworkCore;
 
-    public class WorkshopService : DataQueryService<Workshop>, IWorkshopService
+    public class WorkshopService : LearningTogetherDataQueryService<Workshop>, IWorkshopService
     {
-        public WorkshopService(DataContext context) : base(context, context.Workshops) { }
+        public WorkshopService(DataContext context) : base(context, context.Workshops)
+        {
+        }
 
         public Workshop Create(Workshop workshop)
         {

@@ -2,9 +2,11 @@ namespace learning_together_api.Services
 {
     using Data;
 
-    public class RoleService : DataQueryService<Role>, IRoleService
+    public class RoleService : LearningTogetherDataQueryService<Role>, IRoleService
     {
         public RoleService(DataContext context)
-            : base(context, context.Roles) { }
+            : base(context, context.Roles)
+        {
+        }
     }
 }
