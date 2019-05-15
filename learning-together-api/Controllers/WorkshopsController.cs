@@ -8,9 +8,10 @@ namespace learning_together_api.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Caching.Memory;
+    using pathways_common.Controllers;
     using Services;
 
-    public class WorkshopsController : UserCacheController
+    public class WorkshopsController : CacheResolvingController<User>
     {
         private readonly IMapper mapper;
         private readonly IWorkshopService service;

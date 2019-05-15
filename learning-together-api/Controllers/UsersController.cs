@@ -11,10 +11,11 @@ namespace learning_together_api.Controllers
     using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+    using pathways_common.Controllers;
     using pathways_common.Extensions;
     using Services;
 
-    public class UsersController : UserCacheController
+    public class UsersController : CacheResolvingController<User>
     {
         private readonly AppSettings appSettings;
         private readonly IHostingEnvironment hostingEnvironment;
