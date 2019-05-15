@@ -43,10 +43,8 @@ namespace learning_together_api.Services
             return func();
         }
 
-        public void Update(int userId, User userParam)
+        public void Update(User userParam)
         {
-            if (userId != userParam.Id) throw new UnauthorizedAccessException();
-
             User user = this.context.Users.FirstOrDefault(u => u.Id == userParam.Id);
 
             if (user == null) throw new AppException("User not found");
@@ -58,21 +56,33 @@ namespace learning_together_api.Services
             user.LocationId = userParam.LocationId;
             user.RoleId = userParam.RoleId;
 
-            this.UpdateDisciplineAssociations(userId, userParam);
+            this.UpdateDisciplineAssociations(user.Id, userParam);
 
             this.context.Users.Update(user);
             this.context.SaveChanges();
+        }
+
+        public void Delete(int id)
+        {
+            User user = this.context.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null) return;
+
+            user.Deactivated = true;
+            this.context.SaveChanges();
+        }
+
+        public void Update(int userId, User userParam)
+        {
+            if (userId != userParam.Id) throw new UnauthorizedAccessException();
+
+            this.Update(userParam);
         }
 
         public void Delete(int userId, int id)
         {
             if (userId != id) throw new UnauthorizedAccessException();
 
-            User user = this.context.Users.FirstOrDefault(u => u.Id == id);
-            if (user == null) return;
-
-            user.Deactivated = true;
-            this.context.SaveChanges();
+            this.Delete(id);
         }
 
         public User GetByIdWithIncludes(int id)
