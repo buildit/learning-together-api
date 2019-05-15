@@ -6,7 +6,7 @@ namespace learning_together_api.Services
     using pathways_common.Services;
 
     public abstract class LearningTogetherDataQueryService<T> : DataQueryService<T, DataContext>
-        where T : IIdEntity
+        where T : class, IIdEntity
     {
         protected LearningTogetherDataQueryService(DataContext context, IEnumerable<T> collection) : base(context, collection)
         {
