@@ -4,7 +4,7 @@ namespace learning_together_api.Services
     using System.Collections.Generic;
     using System.Linq;
     using Data;
-    using pathways_common.Interfaces;
+    using pathways_common.Interfaces.Services;
 
     public interface IWorkshopService : IGetDataService<Workshop>, ISearchService<Workshop>
     {
