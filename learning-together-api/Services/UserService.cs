@@ -4,9 +4,9 @@ namespace learning_together_api.Services
     using System.Collections.Generic;
     using System.Linq;
     using Data;
-    using Exceptions;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
+    using pathways_common;
     using pathways_common.Extensions;
 
     public class UserService : LearningTogetherDataQueryService<User>, IUserService
