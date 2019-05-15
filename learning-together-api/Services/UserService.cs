@@ -116,7 +116,7 @@ namespace learning_together_api.Services
 
         public User RetrieveOrCreate(string username, string name)
         {
-            User user = this.context.Users.FirstOrDefault(u => u.Username == username && u.DirectoryName == name);
+            User user = this.collection.FirstOrDefault(u => u.Username == username && u.DirectoryName == name);
 
             if (user != null || string.IsNullOrEmpty(username)) return user;
 
