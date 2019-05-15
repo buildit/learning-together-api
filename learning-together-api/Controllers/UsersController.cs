@@ -11,6 +11,7 @@ namespace learning_together_api.Controllers
     using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+    using pathways_common.Extensions;
     using Services;
 
     public class UsersController : UserCacheController
