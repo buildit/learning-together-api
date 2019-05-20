@@ -108,6 +108,7 @@ namespace learning_together_api.Services
             oldWorkshop.CategoryId = workshop.CategoryId;
             oldWorkshop.Name = workshop.Name;
             oldWorkshop.Description = workshop.Description;
+            oldWorkshop.RobinEventId = workshop.RobinEventId;
 
             this.SetWorkshopDiscipline(id, workshop.CategoryId);
 

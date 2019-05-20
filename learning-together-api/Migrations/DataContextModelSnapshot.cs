@@ -9,14 +9,14 @@ namespace learningtogetherapi.Migrations
     using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
     [DbContext(typeof(DataContext))]
-    internal class DataContextModelSnapshot : ModelSnapshot
+    partial class DataContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("learning_together_api.Data.Category", b =>
@@ -264,6 +264,8 @@ namespace learningtogetherapi.Migrations
                 b.Property<int>("LocationId");
 
                 b.Property<string>("Name");
+
+                b.Property<string>("RobinEventId");
 
                 b.Property<string>("Room");
 

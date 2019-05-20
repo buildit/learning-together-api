@@ -32,6 +32,8 @@ namespace learning_together_api.Data
 
         public int? CategoryId { get; set; }
 
+        public string RobinEventId { get; set; }
+
         public Category Category { get; set; }
 
         public ICollection<WorkshopAttendee> WorkshopAttendees { get; set; }
