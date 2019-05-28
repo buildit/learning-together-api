@@ -75,7 +75,7 @@ namespace learning_together_api.Controllers
             }
             catch (AppException ex)
             {
-                return this.BadRequest(new {message = ex.Message});
+                return this.BadRequest(new { message = ex.Message });
             }
         }
 
@@ -100,7 +100,7 @@ namespace learning_together_api.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] UserDto userDto)
         {
-            int userId = this.GetUserId(this.User.Identity.Name);
+            int userId = this.GetUserId(this.User.Claims.GetEmail());
             User user = this.mapper.Map<User>(userDto);
             user.Id = id;
 
@@ -111,14 +111,14 @@ namespace learning_together_api.Controllers
             }
             catch (AppException ex)
             {
-                return this.BadRequest(new {message = ex.Message});
+                return this.BadRequest(new { message = ex.Message });
             }
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            int userId = this.GetUserId(this.User.Identity.Name);
+            int userId = this.GetUserId(this.User.Claims.GetEmail());
 
             if (id > 0) return this.BadRequest("Delete not yet implemented");
 
