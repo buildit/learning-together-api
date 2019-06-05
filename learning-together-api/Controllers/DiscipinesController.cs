@@ -2,7 +2,6 @@ namespace learning_together_api.Controllers
 {
     using System.Collections.Generic;
     using Data;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using pathways_common.Controllers;
     using Services;
@@ -11,14 +10,13 @@ namespace learning_together_api.Controllers
     {
         private readonly ICategoryService categoryService;
 
-        public DisciplinesController(IDisciplineService service, ICategoryService categoryService) 
+        public DisciplinesController(IDisciplineService service, ICategoryService categoryService)
             : base(service)
         {
             this.categoryService = categoryService;
         }
 
         [HttpGet("categories")]
-        [AllowAnonymous]
         public IActionResult Categories()
         {
             IEnumerable<Category> locations = this.categoryService.GetAll();

@@ -2,7 +2,6 @@ namespace learning_together_api.Controllers
 {
     using System.Collections.Generic;
     using AutoMapper;
-    using Data;
     using Data.Mappers;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
@@ -10,10 +9,14 @@ namespace learning_together_api.Controllers
     using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+    using Microsoft.Graph;
     using pathways_common;
+    using pathways_common.Authentication;
+    using pathways_common.Authentication.TokenAcquisition;
     using pathways_common.Controllers;
     using pathways_common.Extensions;
     using Services;
+    using User = Data.User;
 
     public class UsersController : CacheResolvingController<User>
     {
@@ -26,8 +29,11 @@ namespace learning_together_api.Controllers
         private readonly IUserService userService;
 
         // TODO: move logger to base
-        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IImageStorageService imageService, IHostingEnvironment hostingEnvironment, ILogger<UsersController> logger, IMemoryCache memoryCache)
-            : base(userService, memoryCache)
+        public UsersController(IUserService userService,
+            IMapper mapper, IOptions<AppSettings> appSettings, IImageStorageService imageService,
+            IHostingEnvironment hostingEnvironment, ILogger<UsersController> logger, IMemoryCache memoryCache,
+            ITokenAcquisition tokenAcquisition)
+            : base(userService, memoryCache, tokenAcquisition)
         {
             this.userService = userService;
             this.imageService = imageService;
@@ -39,14 +45,19 @@ namespace learning_together_api.Controllers
         }
 
         [HttpPost("authenticate")]
+        [MsalUiRequiredExceptionFilter(Scopes = new[] { GraphConstants.ScopeUserRead })]
         public IActionResult Authenticate([FromBody] UserDto userDto)
         {
             string authenticatedEmail = this.User.Claims.GetEmail();
             string authenticatedName = this.User.Claims.GetName();
 
+            GraphServiceClient graphClient = GetGraphServiceClient(new[] { GraphConstants.ScopeUserRead });
+            Microsoft.Graph.User me = graphClient.Me.Request().GetAsync().Result;
+            string graphEmail = me.Mail;
+
             if (authenticatedEmail != userDto.Username) return this.BadRequest("Token and e-mail do not match.");
 
-            User user = this.userService.RetrieveOrCreate(authenticatedEmail, authenticatedName);
+            User user = this.userService.RetrieveOrCreate(graphEmail, authenticatedName);
 
             string tokenString = this.Request.Headers["Bearer"];
 
@@ -88,7 +99,6 @@ namespace learning_together_api.Controllers
             return this.Ok(userDtos);
         }
 
-        [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {

@@ -5,7 +5,6 @@ namespace learning_together_api.Controllers
     using AutoMapper;
     using Data;
     using Data.Mappers;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using pathways_common.Controllers;
     using Services;
@@ -27,7 +26,6 @@ namespace learning_together_api.Controllers
             this.mapper = mapper;
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult Search(string search, int maxResults = 5)
         {

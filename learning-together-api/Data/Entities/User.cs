@@ -5,7 +5,7 @@ namespace learning_together_api.Data
     using pathways_common.Entities;
 
     [Table("users", Schema = "admin")]
-    public class User : NamedEntity
+    public class User : PathwaysUser
     {
         public User()
         {
@@ -19,16 +19,11 @@ namespace learning_together_api.Data
 
         public string ImageUrl { get; set; }
 
-        public string DirectoryName { get; set; }
-
-        [NotMapped]
-        public override string Name => this.DirectoryName;
+        [NotMapped] public override string Name => this.DirectoryName;
 
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
-
-        public string Username { get; set; }
 
         public int? RoleId { get; set; }
 
