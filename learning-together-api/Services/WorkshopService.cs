@@ -14,6 +14,7 @@ namespace learning_together_api.Services
 
         public Workshop Create(Workshop workshop)
         {
+            workshop.CreatedDate = workshop.ModifiedDate = DateTime.Now;
             this.context.Workshops.Add(workshop);
             this.context.SaveChanges();
 
@@ -58,6 +59,7 @@ namespace learning_together_api.Services
             if (userId != workshop.EducatorId) throw new UnauthorizedAccessException();
 
             workshop.Cancelled = true;
+            workshop.ModifiedDate = DateTime.Now;
             this.context.Workshops.Update(workshop);
             this.context.SaveChanges();
         }
@@ -109,6 +111,8 @@ namespace learning_together_api.Services
             oldWorkshop.Name = workshop.Name;
             oldWorkshop.Description = workshop.Description;
             oldWorkshop.RobinEventId = workshop.RobinEventId;
+            oldWorkshop.CreatedDate = workshop.CreatedDate;
+            oldWorkshop.ModifiedDate = DateTime.Now;
 
             this.SetWorkshopDiscipline(id, workshop.CategoryId);
 

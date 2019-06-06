@@ -1,5 +1,6 @@
 namespace learning_together_api.Services
 {
+    using System;
     using System.Linq;
     using Data;
 
@@ -17,6 +18,8 @@ namespace learning_together_api.Services
             WorkshopAttendee wa = new WorkshopAttendee();
             wa.WorkshopId = workshopId;
             wa.UserId = userId;
+            wa.CreatedDate = DateTime.Now;
+
             this.context.WorkshopAttendees.Add(wa);
             this.context.SaveChanges();
         }

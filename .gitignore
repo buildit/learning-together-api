@@ -408,3 +408,4 @@ ASALocalRun/
 wwwroot/
 uploads/
 codealike.json
+appsettings.Production.json
