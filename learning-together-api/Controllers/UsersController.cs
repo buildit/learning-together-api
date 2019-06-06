@@ -1,93 +1,71 @@
 namespace learning_together_api.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using AutoMapper;
     using Data.Mappers;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.Options;
     using Microsoft.Graph;
     using pathways_common;
     using pathways_common.Authentication;
-    using pathways_common.Authentication.TokenAcquisition;
     using pathways_common.Controllers;
+    using pathways_common.Core;
     using pathways_common.Extensions;
+    using pathways_common.Interfaces.Services;
     using Services;
     using User = Data.User;
 
     public class UsersController : CacheResolvingController<User>
     {
-        private readonly AppSettings appSettings;
-        private readonly IHostingEnvironment hostingEnvironment;
-        private readonly IImageStorageService imageService;
+        private readonly IMSGraphService graphService;
         private readonly ILogger<UsersController> logger;
         private readonly IMapper mapper;
-        private readonly IMemoryCache memoryCache;
         private readonly IUserService userService;
 
         // TODO: move logger to base
-        public UsersController(IUserService userService,
-            IMapper mapper, IOptions<AppSettings> appSettings, IImageStorageService imageService,
-            IHostingEnvironment hostingEnvironment, ILogger<UsersController> logger, IMemoryCache memoryCache,
-            ITokenAcquisition tokenAcquisition)
-            : base(userService, memoryCache, tokenAcquisition)
+        public UsersController(IServiceHost serviceHost, IMapper mapper, ILogger<UsersController> logger, IMemoryCache memoryCache)
+            : base(serviceHost.GetUserService(), memoryCache)
         {
-            this.userService = userService;
-            this.imageService = imageService;
-            this.hostingEnvironment = hostingEnvironment;
+            this.userService = serviceHost.GetUserService();
+            this.graphService = serviceHost.GetMicrosoftGraphService();
             this.logger = logger;
-            this.memoryCache = memoryCache;
             this.mapper = mapper;
-            this.appSettings = appSettings.Value;
         }
 
         [HttpPost("authenticate")]
-        [MsalUiRequiredExceptionFilter(Scopes = new[] { GraphConstants.ScopeUserRead })]
+        [MsalUiRequiredExceptionFilter(Scopes = new[] { PathwaysConstants.Graph.ScopeUserRead })]
         public IActionResult Authenticate([FromBody] UserDto userDto)
         {
             string authenticatedEmail = this.User.Claims.GetEmail();
             string authenticatedName = this.User.Claims.GetName();
 
-            GraphServiceClient graphClient = GetGraphServiceClient(new[] { GraphConstants.ScopeUserRead });
+            IGraphServiceClient graphClient = this.graphService.GetGraphServiceClient(this.HttpContext, new[] { PathwaysConstants.Graph.ScopeUserRead });
             Microsoft.Graph.User me = graphClient.Me.Request().GetAsync().Result;
             string graphEmail = me.Mail;
 
             if (authenticatedEmail != userDto.Username) return this.BadRequest("Token and e-mail do not match.");
 
-            User user = this.userService.RetrieveOrCreate(graphEmail, authenticatedName);
+            User user = this.userService.RetrieveOrCreate(graphEmail, authenticatedEmail, authenticatedName);
 
-            string tokenString = this.Request.Headers["Bearer"];
+            this.userService.SetLogonTime(user);
+
+            string tokenString = this.Request.Headers["Authorization"];
 
             return this.Ok(new
             {
                 user.Id,
                 user.DirectoryName,
+                user.OrganizationId,
+                user.LastLogin,
                 user.Username,
                 user.FirstName,
                 user.LastName,
                 user.ImageUrl,
                 Token = tokenString
             });
-        }
-
-        [AllowAnonymous]
-        [HttpPost("register")]
-        public IActionResult Register([FromBody] UserDto userDto)
-        {
-            User user = this.mapper.Map<User>(userDto);
-
-            try
-            {
-                User createdUser = this.userService.Create(user);
-                return this.Ok(createdUser.Id);
-            }
-            catch (AppException ex)
-            {
-                return this.BadRequest(new { message = ex.Message });
-            }
         }
 
         [AllowAnonymous]

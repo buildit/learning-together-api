@@ -4,7 +4,7 @@ namespace learning_together_api.Data.Mappers
     using System.Collections.Generic;
     using pathways_common.Entities;
 
-    public class WorkshopDto : NamedEntity
+    public class WorkshopDto : AuditedNamedEntity
     {
         public int EducatorId { get; set; }
 

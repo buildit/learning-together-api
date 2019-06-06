@@ -11,9 +11,10 @@ namespace learning_together_api.Data
         {
         }
 
-        public User(string username, string directoryName)
+        public User(string username, string organizationId, string directoryName)
         {
             this.Username = username;
+            this.OrganizationId = organizationId;
             this.DirectoryName = directoryName;
         }
 

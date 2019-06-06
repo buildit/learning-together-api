@@ -1,5 +1,6 @@
 namespace learning_together_api.Data.Mappers
 {
+    using System;
     using System.Collections.Generic;
 
     public class UserDto
@@ -25,6 +26,10 @@ namespace learning_together_api.Data.Mappers
         public bool Deactivated { get; set; }
 
         public string DirectoryName { get; set; }
+
+        public string OrganizationId { get; set; }
+
+        public DateTime LastLogin { get; set; }
 
         public List<DisciplineDto> UserInterests { get; set; }
 

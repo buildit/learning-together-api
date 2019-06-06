@@ -19,8 +19,8 @@ namespace learning_together_api.Controllers
         private readonly IWorkshopAttendeeService workshopAttendeeService;
 
         public WorkshopsController(IWorkshopService workshopService, IWorkshopAttendeeService workshopAttendeeService,
-            IMapper mapper, IUserService userService, IMemoryCache memoryCache, ITokenAcquisition tokenAcquisition)
-            : base(userService, memoryCache, tokenAcquisition)
+            IMapper mapper, IUserService userService, IMemoryCache memoryCache)
+            : base(userService, memoryCache)
         {
             this.service = workshopService;
             this.workshopAttendeeService = workshopAttendeeService;

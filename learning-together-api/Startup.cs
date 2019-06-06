@@ -36,6 +36,7 @@
             services.Configure<AppSettings>(appSettingsSection);
             services.AddAutoMapper();
 
+            services.AddScoped<IServiceHost, ServiceHost>();
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ILocationService, LocationService>();
