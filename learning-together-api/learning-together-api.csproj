@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
+        <UserSecretsId>9D5AA1CB-13EB-46E4-8ECA-04C5847E3916</UserSecretsId>
         <TargetLatestRuntimePatch>false</TargetLatestRuntimePatch>
         <Configurations>Debug;Release;Test</Configurations>
         <Platforms>AnyCPU</Platforms>

@@ -6,7 +6,7 @@ namespace learning_together_api.Data
     using pathways_common.Entities;
 
     [Table("workshops", Schema = "workshop")]
-    public class Workshop : NamedEntity
+    public class Workshop : AuditedNamedEntity
     {
         public int EducatorId { get; set; }
 

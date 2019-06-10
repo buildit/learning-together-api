@@ -20,3 +20,5 @@ before_script:
 - ssh-keyscan -H 18.224.56.34 >> ~/.ssh/known_hosts
 - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
 - git submodule update --init --recursive
+before_install:
+- openssl aes-256-cbc -K $encrypted_7283ec8c35b0_key -iv $encrypted_7283ec8c35b0_iv -in learning-together-api/appsettings.Production.json.enc -out learning-together-api/appsettings.Production.json -d

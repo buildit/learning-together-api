@@ -24,13 +24,16 @@ namespace learning_together_api.Services
             Func<User> func;
             if (existingUser == null)
             {
+                // Is actually a new user.
                 user.ImageUrl = IdentityExtensions.IdentityConstants.DefaultAvatar;
                 EntityEntry<User> entityEntry = this.context.Users.Add(user);
                 func = () => entityEntry.Entity;
             }
-            else if (existingUser.DirectoryName != user.DirectoryName)
+            else if (existingUser.DirectoryName != user.DirectoryName || existingUser.OrganizationId != user.OrganizationId)
             {
+                // Just needs AD info updated.
                 existingUser.DirectoryName = user.DirectoryName;
+                existingUser.OrganizationId = user.OrganizationId;
                 func = () => existingUser;
             }
             else
@@ -45,7 +48,9 @@ namespace learning_together_api.Services
 
         public void Update(User userParam)
         {
-            User user = this.context.Users.FirstOrDefault(u => u.Id == userParam.Id);
+            User user = this.context.Users
+                .Include(u => u.UserInterests)
+                .FirstOrDefault(u => u.Id == userParam.Id);
 
             if (user == null) throw new AppException("User not found");
 
@@ -56,9 +61,16 @@ namespace learning_together_api.Services
             user.LocationId = userParam.LocationId;
             user.RoleId = userParam.RoleId;
 
-            this.UpdateDisciplineAssociations(user.Id, userParam);
+            user.UserInterests.Clear();
+
+            foreach (UserInterest newInterest in userParam.UserInterests)
+            {
+                newInterest.UserId = user.Id;
+                user.UserInterests.Add(newInterest);
+            }
 
             this.context.Users.Update(user);
+
             this.context.SaveChanges();
         }
 
@@ -83,6 +95,12 @@ namespace learning_together_api.Services
             if (userId != id) throw new UnauthorizedAccessException();
 
             this.Delete(id);
+        }
+
+        public void SetLogonTime(User user)
+        {
+            user.LastLogin = DateTime.Now;
+            this.context.SaveChanges();
         }
 
         public User GetByIdWithIncludes(int id)
@@ -111,16 +129,16 @@ namespace learning_together_api.Services
 
         public User Retrieve(string username)
         {
-            return this.context.Users.FirstOrDefault(u => u.Username == username);
+            return this.context.Users.FirstOrDefault(u => u.Username == username || u.OrganizationId == username);
         }
 
-        public User RetrieveOrCreate(string username, string name)
+        public User RetrieveOrCreate(string graphEmail, string adUsername, string name)
         {
-            User user = this.collection.FirstOrDefault(u => u.Username == username && u.DirectoryName == name);
+            User user = this.collection.FirstOrDefault(u => u.Username == graphEmail && u.Name == name && u.OrganizationId == adUsername);
 
-            if (user != null || string.IsNullOrEmpty(username)) return user;
+            if (user != null || string.IsNullOrEmpty(adUsername)) return user;
 
-            user = new User(username, name);
+            user = new User(graphEmail, adUsername, name);
             return this.Create(user);
         }
 
@@ -128,19 +146,6 @@ namespace learning_together_api.Services
         {
             search = search.ToLower();
             return this.context.Users.Where(u => u.FirstName.ToLower().Contains(search) || u.LastName.ToLower().Contains(search));
-        }
-
-        private void UpdateDisciplineAssociations(int userId, User userParam)
-        {
-            IQueryable<UserInterest> existingInterests = this.context.UserInterests.Where(i => i.UserId == userId);
-
-            if (existingInterests.Any()) this.context.UserInterests.RemoveRange(existingInterests);
-
-            foreach (UserInterest newInterest in userParam.UserInterests)
-            {
-                newInterest.UserId = userId;
-                this.context.UserInterests.Add(newInterest);
-            }
         }
     }
 }

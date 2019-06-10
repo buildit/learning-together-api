@@ -1,5 +1,6 @@
 # globs
 Makefile.in
+learning-together-api/appsettings.Production.json
 *.userprefs
 *.usertasks
 config.make
@@ -407,3 +408,4 @@ ASALocalRun/
 
 wwwroot/
 uploads/
+codealike.json

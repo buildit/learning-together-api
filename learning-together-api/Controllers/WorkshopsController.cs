@@ -5,9 +5,9 @@ namespace learning_together_api.Controllers
     using AutoMapper;
     using Data;
     using Data.Mappers;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Caching.Memory;
+    using pathways_common.Authentication.TokenAcquisition;
     using pathways_common.Controllers;
     using pathways_common.Extensions;
     using Services;
@@ -18,7 +18,8 @@ namespace learning_together_api.Controllers
         private readonly IWorkshopService service;
         private readonly IWorkshopAttendeeService workshopAttendeeService;
 
-        public WorkshopsController(IWorkshopService workshopService, IWorkshopAttendeeService workshopAttendeeService, IMapper mapper, IUserService userService, IMemoryCache memoryCache)
+        public WorkshopsController(IWorkshopService workshopService, IWorkshopAttendeeService workshopAttendeeService,
+            IMapper mapper, IUserService userService, IMemoryCache memoryCache)
             : base(userService, memoryCache)
         {
             this.service = workshopService;
@@ -41,7 +42,6 @@ namespace learning_together_api.Controllers
             return this.Ok(workshop.Id);
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -50,7 +50,6 @@ namespace learning_together_api.Controllers
             return this.Ok(workshopDtos);
         }
 
-        [AllowAnonymous]
         [HttpGet("filter")]
         public IActionResult GetFiltered(int? categoryId, int? locationId, DateTime? startDate, DateTime? endDate)
         {
@@ -59,7 +58,6 @@ namespace learning_together_api.Controllers
             return this.Ok(workshopDtos);
         }
 
-        [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {

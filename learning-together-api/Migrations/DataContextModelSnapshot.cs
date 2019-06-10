@@ -214,9 +214,13 @@ namespace learningtogetherapi.Migrations
 
                 b.Property<string>("ImageUrl");
 
+                b.Property<DateTime>("LastLogin");
+
                 b.Property<string>("LastName");
 
                 b.Property<int?>("LocationId");
+
+                b.Property<string>("OrganizationId");
 
                 b.Property<int?>("RoleId");
 
@@ -253,6 +257,8 @@ namespace learningtogetherapi.Migrations
 
                 b.Property<int?>("CategoryId");
 
+                b.Property<DateTime>("CreatedDate");
+
                 b.Property<string>("Description");
 
                 b.Property<int>("EducatorId");
@@ -262,6 +268,8 @@ namespace learningtogetherapi.Migrations
                 b.Property<string>("ImageUrl");
 
                 b.Property<int>("LocationId");
+
+                b.Property<DateTime>("ModifiedDate");
 
                 b.Property<string>("Name");
 
@@ -289,6 +297,8 @@ namespace learningtogetherapi.Migrations
                 b.Property<int>("UserId");
 
                 b.Property<int>("WorkshopId");
+
+                b.Property<DateTime>("CreatedDate");
 
                 b.HasKey("UserId", "WorkshopId");
 
