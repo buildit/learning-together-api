@@ -7,9 +7,8 @@ namespace learning_together_api.Controllers
     using Data.Mappers;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Caching.Memory;
-    using pathways_common.Authentication.TokenAcquisition;
+    using pathways_common.Authentication.Extensions;
     using pathways_common.Controllers;
-    using pathways_common.Extensions;
     using Services;
 
     public class WorkshopsController : CacheResolvingController<User>

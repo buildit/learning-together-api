@@ -77,7 +77,12 @@ namespace learning_together_api.Services
 
         public IEnumerable<Workshop> GetAll(int? categoryId, int? locationId, DateTime? startDate, DateTime? endDate)
         {
-            IQueryable<Workshop> workshops = this.GetLoaded();
+            IQueryable<Workshop> workshops = this.GetLoaded(!startDate.HasValue);
+            if (startDate.HasValue)
+            {
+                workshops = workshops.Where(w => w.Cancelled != true);
+            }
+            
             if (categoryId.HasValue)
             {
                 workshops = workshops.Where(w => w.CategoryId == categoryId);

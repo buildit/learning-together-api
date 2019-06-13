@@ -1,6 +1,5 @@
 namespace learning_together_api.Controllers
 {
-    using System;
     using System.Collections.Generic;
     using AutoMapper;
     using Data.Mappers;
@@ -11,9 +10,9 @@ namespace learning_together_api.Controllers
     using Microsoft.Graph;
     using pathways_common;
     using pathways_common.Authentication;
+    using pathways_common.Authentication.Extensions;
     using pathways_common.Controllers;
     using pathways_common.Core;
-    using pathways_common.Extensions;
     using pathways_common.Interfaces.Services;
     using Services;
     using User = Data.User;
