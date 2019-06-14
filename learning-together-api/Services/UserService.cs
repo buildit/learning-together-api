@@ -7,7 +7,7 @@ namespace learning_together_api.Services
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using pathways_common;
-    using pathways_common.Extensions;
+    using pathways_common.Authentication.Extensions;
 
     public class UserService : LearningTogetherDataQueryService<User>, IUserService
     {
