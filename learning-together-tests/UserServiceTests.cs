@@ -34,17 +34,5 @@ namespace learning_together_tests
             user.FirstName = "First";
             user.LastName = "Last";
         }
-
-        [Fact]
-        public void UserService_TestUpdate_CapturesFields()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Fact]
-        public void UserService_TestUpdate_Secured()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

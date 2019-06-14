@@ -37,6 +37,7 @@ namespace learning_together_tests
             var entity = new Workshop();
             entity.Name = "Name";
             entity.RobinEventId = "RobinEvent";
+            entity.ArchiveLink = "Link";
 
             Workshop workshop = service.Create(entity);
         }
