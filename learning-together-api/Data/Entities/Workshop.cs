@@ -34,6 +34,8 @@ namespace learning_together_api.Data
 
         public string RobinEventId { get; set; }
 
+        public string ArchiveLink { get; set; }
+
         public Category Category { get; set; }
 
         public ICollection<WorkshopAttendee> WorkshopAttendees { get; set; }
