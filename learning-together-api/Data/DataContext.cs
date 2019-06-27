@@ -1,13 +1,20 @@
 namespace learning_together_api.Data
 {
     using Microsoft.EntityFrameworkCore;
+    using pathways_common.Entities;
 
     public class DataContext : DbContext
     {
-        public DataContext() { }
+        public DataContext()
+        {
+        }
 
         public DataContext(DbContextOptions<DataContext> options)
-            : base(options) { }
+            : base(options)
+        {
+        }
+
+        public virtual DbSet<ExceptionEntity> Exceptions { get; set; }
 
         public virtual DbSet<User> Users { get; set; }
 
